@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "575322348054",
+    "project_id": "nerdy-news-production-f781e",
+    "storage_bucket": "nerdy-news-production-f781e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:575322348054:android:fcac3bfcdaf258d6af3337",
+        "android_client_info": {
+          "package_name": "news.nerdy.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "575322348054-1dcd1j9dcgfu2hua0nt0vpcrc9v5fsfq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "news.nerdy.mobile",
+            "certificate_hash": "d97a3a776f82ba88036803ec7dd976fa31bf338e"
+          }
+        },
+        {
+          "client_id": "575322348054-anlqj6alfa5rqmpkmc45b42tevt910h0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmlKWr7dBVRHMJ2a7Sk5zlzJnRc_sSpRM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "575322348054-anlqj6alfa5rqmpkmc45b42tevt910h0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
