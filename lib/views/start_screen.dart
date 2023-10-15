@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:analytics/analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/constants/commons.dart';
 import 'package:mobile/gen/assets.gen.dart';
+import 'package:mobile/get_it.dart';
 import 'package:mobile/routes/routes.dart';
 import 'package:mobile/state/blocs/auth/auth_bloc.dart';
 import 'package:mobile/views/dashboard.dart';
@@ -64,6 +66,9 @@ class _MyStartScreenState extends State<MyStartScreen> {
     final auth = AuthBloc()..add(UserStatusEvent());
     subscription = auth.stream.listen((state) {
       if (state is AuthSuccess) {
+        appAnalytics
+          ..setUserID(state.userID ?? '')
+          ..log(LogEvent.appOpen);
         Navigator.pushReplacementNamed(context, MyRoutes.dashboardScreen);
       }
     });
@@ -179,6 +184,8 @@ class AuthButtonWidget extends StatelessWidget {
           return const CircularProgressIndicator.adaptive(
             backgroundColor: Colors.white,
           );
+        } else if (state is AuthSuccess) {
+          appAnalytics.log(LogEvent.logIn);
         }
         return Column(
           children: [

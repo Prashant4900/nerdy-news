@@ -2,4 +2,5 @@
 library analytics;
 
 export 'src/analytics.dart';
+export 'src/crashytics.dart';
 export 'src/event.dart';

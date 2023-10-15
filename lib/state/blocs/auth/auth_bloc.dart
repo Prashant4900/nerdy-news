@@ -29,7 +29,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _auth.signInWithGoogle(
         client: client,
       );
-      emit(AuthSuccess());
+      emit(const AuthSuccess());
     } catch (error) {
       emit(AuthFailure(error: error.toString()));
     }
@@ -58,7 +58,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (user == null) {
         emit(const AuthFailure(error: ''));
       } else {
-        emit(AuthSuccess());
+        emit(const AuthSuccess());
       }
     } catch (error) {
       emit(AuthFailure(error: error.toString()));

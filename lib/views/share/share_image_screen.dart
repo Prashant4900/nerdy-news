@@ -4,16 +4,19 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:akar_icons_flutter/akar_icons_flutter.dart';
+import 'package:analytics/analytics.dart';
 import 'package:appinio_social_share/appinio_social_share.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/constants/commons.dart';
 import 'package:mobile/gen/assets.gen.dart';
+import 'package:mobile/get_it.dart';
 import 'package:mobile/views/share/news_cards.dart';
 import 'package:mobile/widgets/buttons.dart';
 import 'package:news/news.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
 class MyShareImageScreen extends StatefulWidget {
@@ -63,8 +66,6 @@ class _MyShareImageScreenState extends State<MyShareImageScreen> {
 
     _isInstagramInstall = installApps['instagram_stories'] as bool;
     _isTwitterInstall = installApps['twitter'] as bool;
-
-    log('message: $installApps');
     setState(() {});
   }
 
@@ -209,10 +210,7 @@ class _MyShareImageScreenState extends State<MyShareImageScreen> {
               ShareButtonWidget(
                 icon: Assets.svg.xTwitter.svg(
                   height: 26,
-                  colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(.6),
-                    BlendMode.color,
-                  ),
+                  color: Colors.black.withOpacity(.6),
                 ),
                 message: 'Tweet',
                 onTap: () async {
@@ -228,6 +226,13 @@ class _MyShareImageScreenState extends State<MyShareImageScreen> {
                         content: Text('Something went wrong.'),
                       ),
                     );
+                  } else {
+                    await appAnalytics.log(
+                      LogEvent.share,
+                      shareType: ShareType.twitter,
+                      newsID: widget.news.id,
+                      newsTitle: widget.news.title,
+                    );
                   }
                 },
               )
@@ -238,7 +243,29 @@ class _MyShareImageScreenState extends State<MyShareImageScreen> {
                 onTap: () async {
                   final downloadLocation = await getDownloadsDirectory();
                   final file = await _generateImageFile(downloadLocation!.path);
-                  await shareBySMS('Check this one.', file.path);
+                  log('content:/${file.path}');
+                  await Clipboard.setData(
+                    ClipboardData(text: 'content:/${file.path}'),
+                  );
+                  // final response = await appinioSocialShare.shareToSMS(
+                  //   // 'Nerdy News',
+                  //   'Check this one.',
+                  //   filePath: file.path,
+                  // );
+                  // if (response != 'SUCCESS') {
+                  //   scaffoldMessengerState.showSnackBar(
+                  //     const SnackBar(
+                  //       content: Text('Something went wrong.'),
+                  //     ),
+                  //   );
+                  // } else {
+                  //   await appAnalytics.log(
+                  //     LogEvent.share,
+                  //     shareType: ShareType.sms,
+                  //     newsID: widget.news.id,
+                  //     newsTitle: widget.news.title,
+                  //   );
+                  // }
                 },
               ),
             if (_isInstagramInstall)
@@ -262,6 +289,13 @@ class _MyShareImageScreenState extends State<MyShareImageScreen> {
                         content: Text('Something went wrong.'),
                       ),
                     );
+                  } else {
+                    await appAnalytics.log(
+                      LogEvent.share,
+                      shareType: ShareType.instagram,
+                      newsID: widget.news.id,
+                      newsTitle: widget.news.title,
+                    );
                   }
                 },
               )
@@ -272,23 +306,49 @@ class _MyShareImageScreenState extends State<MyShareImageScreen> {
               message: 'Save',
               onTap: () async {
                 try {
-                  final directory = await getDownloadsDirectory();
-                  final file = await _generateImageFile(directory!.path);
-                  final regex = RegExp(r'(/[^/]+/\d/)(.*)');
-                  final match = regex.firstMatch(file.path);
-                  final downloadPath = 'Phone/${match!.group(2)}';
+                  final state = await Permission.manageExternalStorage.status;
+                  final state2 = await Permission.storage.status;
 
+                  if ((state2.isGranted) || (state.isGranted)) {
+                    log('permission given');
+                    final downloadDirectory = await getDownloadsDirectory();
+                    final downloadPath1 = downloadDirectory!.path;
+                    final dir = Directory(
+                      '$downloadPath1/Starland/Images Downloader/',
+                    );
+                    log('dir: $dir');
+
+                    final directory = Directory('/storage/emulated/0/Download');
+                    // final directory = await getExternalStorageDirectory();
+                    log(directory.path);
+                    final file = await _generateImageFile(directory.path);
+                    final regex = RegExp(r'(/[^/]+/\d/)(.*)');
+                    final match = regex.firstMatch(file.path);
+                    final downloadPath = 'Phone/${match!.group(2)}';
+
+                    scaffoldMessengerState.showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Image save Successfully at: $downloadPath',
+                        ),
+                      ),
+                    );
+
+                    await appAnalytics.log(
+                      LogEvent.share,
+                      shareType: ShareType.download,
+                      newsID: widget.news.id,
+                      newsTitle: widget.news.title,
+                    );
+                  } else {
+                    await Permission.storage.request();
+                    await Permission.manageExternalStorage.request();
+                  }
+                } catch (e) {
+                  log(e.toString());
                   scaffoldMessengerState.showSnackBar(
                     SnackBar(
-                      content: Text(
-                        'Image save Successfully at: $downloadPath',
-                      ),
-                    ),
-                  );
-                } catch (e) {
-                  scaffoldMessengerState.showSnackBar(
-                    const SnackBar(
-                      content: Text('Something went wrong'),
+                      content: Text('Something went wrong: $e'),
                     ),
                   );
                 }
@@ -306,6 +366,12 @@ class _MyShareImageScreenState extends State<MyShareImageScreen> {
                   await Share.shareXFiles(
                     [XFile(file.path)],
                     text: 'Hey check this out.',
+                  );
+                  await appAnalytics.log(
+                    LogEvent.share,
+                    shareType: ShareType.image,
+                    newsID: widget.news.id,
+                    newsTitle: widget.news.title,
                   );
                 } catch (e) {
                   log(e.toString());

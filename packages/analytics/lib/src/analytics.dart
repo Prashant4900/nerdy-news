@@ -13,17 +13,21 @@ class AppAnalytics {
     await analytics.logAppOpen();
   }
 
+  Future<void> setUserID(String userID) async {
+    await analytics.setUserId(id: userID);
+  }
+
   final analytics = FirebaseAnalytics.instance;
 
-  Future<void> log({
-    LogEvent event = LogEvent.none,
-    String? name,
+  Future<void> log(
+    LogEvent event, {
     String? screenClass,
     String? screenName,
+    ShareType shareType = ShareType.link,
+    int? newsID,
+    String? newsTitle,
   }) async {
     switch (event) {
-      case LogEvent.none:
-        await analytics.logEvent(name: name!);
       case LogEvent.logIn:
         await analytics.logLogin();
       case LogEvent.appOpen:
@@ -34,13 +38,21 @@ class AppAnalytics {
           screenName: screenName,
         );
       case LogEvent.share:
-      // analytics.logShare(
-      //   contentType: contentType,
-      //   itemId: itemId,
-      //   method: method,
-      // );
-      case LogEvent.signUp:
-      // analytics.logSignUp(signUpMethod: signUpMethod);
+        assert(
+          newsID != null && newsTitle != null,
+          'News ID and Title must be not null',
+        );
+        await analytics.logShare(
+          contentType: shareType.label,
+          itemId: 'ID: $newsID - Title: $newsTitle',
+          method: shareType.label,
+        );
+      case LogEvent.logOut:
+        await analytics.logEvent(name: 'log_out');
     }
+  }
+
+  Future<void> set(String screenName) async {
+    await analytics.setCurrentScreen(screenName: screenName);
   }
 }

@@ -15,7 +15,14 @@ final class AuthInitial extends AuthState {}
 final class AuthLoading extends AuthState {}
 
 @immutable
-final class AuthSuccess extends AuthState {}
+final class AuthSuccess extends AuthState {
+  const AuthSuccess({this.userID});
+
+  final String? userID;
+
+  @override
+  List<Object> get props => [super.props, userID!];
+}
 
 @immutable
 final class AuthFailure extends AuthState {

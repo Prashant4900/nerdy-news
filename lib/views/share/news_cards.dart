@@ -19,7 +19,7 @@ class FirstNewsCard extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: ColoredBox(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: Theme.of(context).scaffoldBackgroundColor.withOpacity(.95),
           child: ListView(
             padding: horizontalPadding12 + verticalPadding12,
             shrinkWrap: true,
@@ -71,10 +71,7 @@ class PublisherWidget extends StatelessWidget {
       children: [
         Assets.svg.icon.svg(
           height: 12,
-          colorFilter: ColorFilter.mode(
-            Theme.of(context).colorScheme.onBackground,
-            BlendMode.color,
-          ),
+          color: Theme.of(context).colorScheme.onBackground,
         ),
         horizontalMargin4,
         Text(

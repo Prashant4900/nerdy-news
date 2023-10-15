@@ -1,8 +1,10 @@
 import 'package:akar_icons_flutter/akar_icons_flutter.dart';
+import 'package:analytics/analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/constants/commons.dart';
+import 'package:mobile/get_it.dart';
 import 'package:mobile/routes/routes.dart';
 import 'package:mobile/state/blocs/auth/auth_bloc.dart';
 import 'package:mobile/state/cubits/reader_mode/reader_mode_cubit.dart';
@@ -264,6 +266,8 @@ class SignInButton extends StatelessWidget {
               context.read<AuthBloc>().add(GoogleSignInEvent());
             },
           );
+        } else if (state is AuthSuccess) {
+          appAnalytics.log(LogEvent.logIn);
         }
 
         return const SizedBox.shrink();
@@ -295,6 +299,8 @@ class SignOutButton extends StatelessWidget {
               context.read<AuthBloc>().add(SignOutEvent());
             },
           );
+        } else if (state is AuthFailure) {
+          appAnalytics.log(LogEvent.logOut);
         }
 
         return const SizedBox.shrink();

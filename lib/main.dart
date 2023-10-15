@@ -10,18 +10,24 @@ import 'package:mobile/get_it.dart';
 import 'package:mobile/services/supabase_config.dart';
 
 Future<void> main() async {
-  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await Env.load(
-    source: EnvLoader.asset('assets/env/.pro.env'),
-    password: 'NerdyNews490',
-  );
-  await Firebase.initializeApp();
-  await AppAnalytics.init();
-  await SupabaseConfig.init();
-  await setup();
-  FlutterNativeSplash.remove();
-  runApp(
-    const MyApp(),
+  await runZonedGuarded<Future<void>>(
+    () async {
+      final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+      FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+      await Env.load(
+        source: EnvLoader.asset('assets/env/.pro.env'),
+        password: 'NerdyNews490',
+      );
+      await Firebase.initializeApp();
+      await AppAnalytics.init();
+      await AppCrashlytics.init();
+      await SupabaseConfig.init();
+      await setup();
+      FlutterNativeSplash.remove();
+      runApp(
+        const MyApp(),
+      );
+    },
+    AppCrashlytics.recodeError,
   );
 }

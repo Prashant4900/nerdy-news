@@ -43,6 +43,7 @@ dependencies:
   feedback:
     path: ./packages/feedback
   firebase_core: ^2.17.0
+  firebase_performance: ^0.9.2+7
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.3
@@ -63,6 +64,7 @@ dependencies:
   news:
     path: ./packages/news
   path_provider: ^2.1.1
+  permission_handler: ^11.0.1
   provider: ^6.0.5
   share_plus: ^7.1.0
   shared_preferences: ^2.2.1
