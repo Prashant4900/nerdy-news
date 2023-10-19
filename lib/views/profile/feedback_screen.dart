@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/constants/commons.dart';
 import 'package:mobile/state/blocs/feedback/feedback_bloc.dart';
+import 'package:mobile/versions.dart';
 import 'package:mobile/widgets/buttons.dart';
 
 class MyFeedbackScreen extends StatefulWidget {
@@ -82,7 +83,7 @@ class _MyFeedbackScreenState extends State<MyFeedbackScreen> {
                     const InputDecoration.collapsed(hintText: 'Enter Title'),
               ),
               Text(
-                'description',
+                'Description',
                 style: Theme.of(context)
                     .textTheme
                     .titleSmall!
@@ -111,7 +112,7 @@ class _MyFeedbackScreenState extends State<MyFeedbackScreen> {
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                     TextSpan(
-                      text: '0.0.1',
+                      text: version,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ],

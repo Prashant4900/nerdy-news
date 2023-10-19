@@ -1,12 +1,9 @@
-import 'package:flutter/material.dart'
-    show EdgeInsets, EdgeInsetsDirectional, SizedBox, SliverToBoxAdapter;
-import 'package:mobile/widgets/nil.dart';
-
-const nilWidget = Nil();
+import 'package:flutter/material.dart';
 
 const emptyWidget = SizedBox.shrink();
 const emptyWidgetWide = SizedBox(width: double.infinity);
 const emptySliver = SliverToBoxAdapter();
+const spacer = Spacer();
 
 // Margins
 

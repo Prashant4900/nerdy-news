@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile/utils/app_pref.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -40,6 +41,28 @@ class CacheHelper {
       default:
         return ThemeMode.system;
     }
+  }
+
+  Future<void> setJoinedDate() async {
+    final currentDate = DateTime.now();
+    final formatDate = DateFormat('MMMM y').format(currentDate);
+
+    final joinedDate = await getJoinedDate();
+
+    if (joinedDate == null) {
+      await _appPreference.save(PreferenceKey.joinedAt, formatDate);
+    }
+  }
+
+  static Future<String?> getJoinedDate() async {
+    final joinedDate =
+        await _appPreference.get(PreferenceKey.joinedAt, '') as String;
+
+    if (joinedDate == '') {
+      return null;
+    }
+
+    return joinedDate;
   }
 
   static Future<bool> saveTheme(PreferenceKey key, ThemeMode themeMode) async {

@@ -1,15 +1,26 @@
 import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:analytics/analytics.dart';
+import 'package:appinio_social_share/appinio_social_share.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile/constants/commons.dart';
 import 'package:mobile/get_it.dart';
 import 'package:mobile/routes/routes.dart';
+import 'package:mobile/services/cache_helper.dart';
 import 'package:mobile/state/blocs/auth/auth_bloc.dart';
 import 'package:mobile/state/cubits/reader_mode/reader_mode_cubit.dart';
 import 'package:mobile/state/cubits/theme/theme_cubit.dart';
 import 'package:mobile/widgets/buttons.dart';
+// import 'package:share_plus/share_plus.dart';
+
+Future<String> getJoinedDate() async {
+  final date = await CacheHelper.getJoinedDate();
+  final currentDate = DateTime.now();
+  final formatDate = DateFormat('MMMM y').format(currentDate);
+  return date ?? formatDate;
+}
 
 class MyProfilePage extends StatelessWidget {
   const MyProfilePage({super.key});
@@ -51,16 +62,40 @@ class MyProfilePage extends StatelessWidget {
                           'Nerdy Reader',
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
-                        Text(
-                          'Joined September 2023',
-                          style: Theme.of(context).textTheme.bodySmall,
+                        FutureBuilder(
+                          future: getJoinedDate(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(
+                                'Joined ${snapshot.data}',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              );
+                            }
+                            return Text(
+                              'Joined ',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            );
+                          },
                         ),
                       ],
                     ),
                   ],
                 ),
                 verticalMargin32,
-                const CustomOutlineButton(label: 'Invite Friends'),
+                CustomOutlineButton(
+                  label: 'Invite Friends',
+                  onTap: () {
+                    final appinioSocialShare = AppinioSocialShare();
+
+                    appinioSocialShare.shareToSystem(
+                      'Invite Friends',
+                      'Hey, Check this awesome news application: https://play.google.com/store/apps/details?id=news.nerdy.mobile',
+                    );
+                    // Share.share(
+                    //   'Hey, Check this awesome news application: https://play.google.com/store/apps/details?id=news.nerdy.mobile',
+                    // );
+                  },
+                ),
                 verticalMargin8,
                 const Divider(),
                 verticalMargin16,

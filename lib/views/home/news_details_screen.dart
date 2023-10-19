@@ -1,8 +1,9 @@
 import 'dart:developer';
 
 import 'package:analytics/analytics.dart';
+import 'package:appinio_social_share/appinio_social_share.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html_audio/flutter_html_audio.dart';
@@ -19,7 +20,7 @@ import 'package:mobile/utils/date_time.dart';
 import 'package:mobile/views/home/bottom_sheet.dart';
 import 'package:news/news.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
+// import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -131,6 +132,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
           Expanded(
             child: _isReaderMode ? _renderReaderView() : _renderWebView(),
           ),
+          Expanded(child: _renderReaderView()),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -167,20 +169,26 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 }
               },
               icon: _isSaved
-                  ? const Icon(Icons.favorite)
-                  : const Icon(Icons.favorite_border_outlined),
+                  ? const Icon(Icons.bookmark)
+                  : const Icon(Icons.bookmark_border),
             ),
             IconButton(
-              onPressed: () => Share.share(
-                'Hey Checkout this News ${widget.news.source}',
-                subject: widget.news.title,
-              ).whenComplete(
-                () async => appAnalytics.log(
-                  LogEvent.share,
-                  newsID: widget.news.id,
-                  newsTitle: widget.news.title,
-                ),
-              ),
+              onPressed: () {
+                final appinioSocialShare = AppinioSocialShare();
+
+                appinioSocialShare
+                    .shareToSystem(
+                      'Hey Checkout this News ${widget.news.source}',
+                      widget.news.title!,
+                    )
+                    .whenComplete(
+                      () async => appAnalytics.log(
+                        LogEvent.share,
+                        newsID: widget.news.id,
+                        newsTitle: widget.news.title,
+                      ),
+                    );
+              },
               icon: const Icon(Icons.share),
             ),
           ],
@@ -195,19 +203,6 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // AspectRatio(
-            //   aspectRatio: 16 / 9,
-            //   child: Image.network(
-            //     widget.news.thumbnail!,
-            //     fit: widget.news.description!.length > 100
-            //         ? BoxFit.fitHeight
-            //         : BoxFit.fitWidth,
-            //     loadingBuilder: (context, child, loadingProgress) {
-            //       if (loadingProgress == null) return child;
-            //       return const ImageShimmer();
-            //     },
-            //   ),
-            // ),
             AspectRatio(
               aspectRatio: 16 / 9,
               child: CachedNetworkImage(

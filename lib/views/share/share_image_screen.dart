@@ -8,7 +8,6 @@ import 'package:analytics/analytics.dart';
 import 'package:appinio_social_share/appinio_social_share.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:mobile/constants/commons.dart';
 import 'package:mobile/gen/assets.gen.dart';
 import 'package:mobile/get_it.dart';
@@ -17,7 +16,6 @@ import 'package:mobile/widgets/buttons.dart';
 import 'package:news/news.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:share_plus/share_plus.dart';
 
 class MyShareImageScreen extends StatefulWidget {
   const MyShareImageScreen({required this.news, super.key});
@@ -99,25 +97,6 @@ class _MyShareImageScreenState extends State<MyShareImageScreen> {
       throw Exception(e);
     }
   }
-
-  // --------------------------------------------------------
-
-  final MethodChannel platform = const MethodChannel(
-    'your_unique_channel_name',
-  ); // Change this channel name
-
-  Future<void> shareBySMS(String text, String filePath) async {
-    try {
-      await platform.invokeMethod(
-        'shareBySMS',
-        {'message': text, 'filePath': filePath},
-      );
-    } on PlatformException catch (e) {
-      log('Error: ${e.message}');
-    }
-  }
-
-  // --------------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -235,38 +214,6 @@ class _MyShareImageScreenState extends State<MyShareImageScreen> {
                     );
                   }
                 },
-              )
-            else
-              ShareButtonWidget(
-                iconData: AkarIcons.envelope,
-                message: 'SMS',
-                onTap: () async {
-                  final downloadLocation = await getDownloadsDirectory();
-                  final file = await _generateImageFile(downloadLocation!.path);
-                  log('content:/${file.path}');
-                  await Clipboard.setData(
-                    ClipboardData(text: 'content:/${file.path}'),
-                  );
-                  // final response = await appinioSocialShare.shareToSMS(
-                  //   // 'Nerdy News',
-                  //   'Check this one.',
-                  //   filePath: file.path,
-                  // );
-                  // if (response != 'SUCCESS') {
-                  //   scaffoldMessengerState.showSnackBar(
-                  //     const SnackBar(
-                  //       content: Text('Something went wrong.'),
-                  //     ),
-                  //   );
-                  // } else {
-                  //   await appAnalytics.log(
-                  //     LogEvent.share,
-                  //     shareType: ShareType.sms,
-                  //     newsID: widget.news.id,
-                  //     newsTitle: widget.news.title,
-                  //   );
-                  // }
-                },
               ),
             if (_isInstagramInstall)
               ShareButtonWidget(
@@ -298,9 +245,7 @@ class _MyShareImageScreenState extends State<MyShareImageScreen> {
                     );
                   }
                 },
-              )
-            else
-              nilWidget,
+              ),
             ShareButtonWidget(
               iconData: AkarIcons.image,
               message: 'Save',
@@ -310,17 +255,10 @@ class _MyShareImageScreenState extends State<MyShareImageScreen> {
                   final state2 = await Permission.storage.status;
 
                   if ((state2.isGranted) || (state.isGranted)) {
-                    log('permission given');
-                    final downloadDirectory = await getDownloadsDirectory();
-                    final downloadPath1 = downloadDirectory!.path;
-                    final dir = Directory(
-                      '$downloadPath1/Starland/Images Downloader/',
-                    );
-                    log('dir: $dir');
-
-                    final directory = Directory('/storage/emulated/0/Download');
-                    // final directory = await getExternalStorageDirectory();
-                    log(directory.path);
+                    // final directory =
+                    //     Directory('/storage/emulated/0/Download/');
+                    final directory = await getExternalStorageDirectory();
+                    log(directory!.path);
                     final file = await _generateImageFile(directory.path);
                     final regex = RegExp(r'(/[^/]+/\d/)(.*)');
                     final match = regex.firstMatch(file.path);
@@ -363,9 +301,14 @@ class _MyShareImageScreenState extends State<MyShareImageScreen> {
                   final file = await _generateImageFile(downloadLocation.path);
 
                   await file.create();
-                  await Share.shareXFiles(
-                    [XFile(file.path)],
-                    text: 'Hey check this out.',
+                  // await Share.shareXFiles(
+                  //   [XFile(file.path)],
+                  //   text: 'Hey check this out.',
+                  // );
+                  await appinioSocialShare.shareToSystem(
+                    'Hey check this out.',
+                    widget.news.title!,
+                    filePath: file.path,
                   );
                   await appAnalytics.log(
                     LogEvent.share,

@@ -4,6 +4,7 @@ enum PreferenceKey {
   // Keys for the app preferences
   themeMode('theme_mode'),
   bookMarkList('book_mark_list'),
+  joinedAt('joined_at'),
   readerMode('reader_mode');
 
   // property to get the key as string

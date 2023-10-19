@@ -7,6 +7,7 @@ import 'package:mobile/constants/commons.dart';
 import 'package:mobile/gen/assets.gen.dart';
 import 'package:mobile/get_it.dart';
 import 'package:mobile/routes/routes.dart';
+import 'package:mobile/services/cache_helper.dart';
 import 'package:mobile/state/blocs/auth/auth_bloc.dart';
 import 'package:mobile/views/dashboard.dart';
 import 'package:mobile/widgets/buttons.dart';
@@ -63,6 +64,7 @@ class _MyStartScreenState extends State<MyStartScreen> {
   }
 
   Future<void> checkUserStatus() async {
+    await CacheHelper().setJoinedDate();
     final auth = AuthBloc()..add(UserStatusEvent());
     subscription = auth.stream.listen((state) {
       if (state is AuthSuccess) {
