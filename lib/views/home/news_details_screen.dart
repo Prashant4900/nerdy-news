@@ -20,7 +20,7 @@ import 'package:mobile/utils/date_time.dart';
 import 'package:mobile/views/home/bottom_sheet.dart';
 import 'package:news/news.dart';
 import 'package:provider/provider.dart';
-// import 'package:share_plus/share_plus.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -132,7 +132,6 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
           Expanded(
             child: _isReaderMode ? _renderReaderView() : _renderWebView(),
           ),
-          Expanded(child: _renderReaderView()),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -173,22 +172,16 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                   : const Icon(Icons.bookmark_border),
             ),
             IconButton(
-              onPressed: () {
-                final appinioSocialShare = AppinioSocialShare();
-
-                appinioSocialShare
-                    .shareToSystem(
-                      'Hey Checkout this News ${widget.news.source}',
-                      widget.news.title!,
-                    )
-                    .whenComplete(
-                      () async => appAnalytics.log(
-                        LogEvent.share,
-                        newsID: widget.news.id,
-                        newsTitle: widget.news.title,
-                      ),
-                    );
-              },
+              onPressed: () => Share.share(
+                'Hey Checkout this News ${widget.news.source}',
+                subject: widget.news.title,
+              ).whenComplete(
+                () async => appAnalytics.log(
+                  LogEvent.share,
+                  newsID: widget.news.id,
+                  newsTitle: widget.news.title,
+                ),
+              ),
               icon: const Icon(Icons.share),
             ),
           ],

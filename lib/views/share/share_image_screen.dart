@@ -16,6 +16,7 @@ import 'package:mobile/widgets/buttons.dart';
 import 'package:news/news.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 
 class MyShareImageScreen extends StatefulWidget {
   const MyShareImageScreen({required this.news, super.key});
@@ -257,7 +258,7 @@ class _MyShareImageScreenState extends State<MyShareImageScreen> {
                   if ((state2.isGranted) || (state.isGranted)) {
                     // final directory =
                     //     Directory('/storage/emulated/0/Download/');
-                    final directory = await getExternalStorageDirectory();
+                    final directory = await getDownloadsDirectory();
                     log(directory!.path);
                     final file = await _generateImageFile(directory.path);
                     final regex = RegExp(r'(/[^/]+/\d/)(.*)');
@@ -301,14 +302,9 @@ class _MyShareImageScreenState extends State<MyShareImageScreen> {
                   final file = await _generateImageFile(downloadLocation.path);
 
                   await file.create();
-                  // await Share.shareXFiles(
-                  //   [XFile(file.path)],
-                  //   text: 'Hey check this out.',
-                  // );
-                  await appinioSocialShare.shareToSystem(
-                    'Hey check this out.',
-                    widget.news.title!,
-                    filePath: file.path,
+                  await Share.shareXFiles(
+                    [XFile(file.path)],
+                    text: 'Hey check this out.',
                   );
                   await appAnalytics.log(
                     LogEvent.share,

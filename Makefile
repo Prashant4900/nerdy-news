@@ -16,6 +16,11 @@ clean:
 	flutter clean
 	make get
 
+.PHONY: abb
+abb:
+	make clean
+	flutter build appbundle
+
 .PHONY: build
 build:
 	dart run build_runner build
