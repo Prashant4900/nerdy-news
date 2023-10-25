@@ -31,10 +31,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   ) async {
     emit(const NewsLoadingState([]));
     try {
-      final result = await news.getAllNews(
-        client: client,
-        page: newsPage,
-      );
+      final result = await news.getAllNews(client: client);
       emit(NewsLoadedState(result!));
     } catch (e) {
       final message = e.toString();

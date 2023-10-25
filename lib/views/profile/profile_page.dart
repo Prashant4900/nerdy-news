@@ -1,6 +1,5 @@
 import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:analytics/analytics.dart';
-import 'package:appinio_social_share/appinio_social_share.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,8 +11,9 @@ import 'package:mobile/services/cache_helper.dart';
 import 'package:mobile/state/blocs/auth/auth_bloc.dart';
 import 'package:mobile/state/cubits/reader_mode/reader_mode_cubit.dart';
 import 'package:mobile/state/cubits/theme/theme_cubit.dart';
+import 'package:mobile/versions.dart';
 import 'package:mobile/widgets/buttons.dart';
-// import 'package:share_plus/share_plus.dart';
+import 'package:share_plus/share_plus.dart';
 
 Future<String> getJoinedDate() async {
   final date = await CacheHelper.getJoinedDate();
@@ -85,15 +85,9 @@ class MyProfilePage extends StatelessWidget {
                 CustomOutlineButton(
                   label: 'Invite Friends',
                   onTap: () {
-                    final appinioSocialShare = AppinioSocialShare();
-
-                    appinioSocialShare.shareToSystem(
-                      'Invite Friends',
+                    Share.share(
                       'Hey, Check this awesome news application: https://play.google.com/store/apps/details?id=news.nerdy.mobile',
                     );
-                    // Share.share(
-                    //   'Hey, Check this awesome news application: https://play.google.com/store/apps/details?id=news.nerdy.mobile',
-                    // );
                   },
                 ),
                 verticalMargin8,
@@ -269,7 +263,7 @@ class MyProfilePage extends StatelessWidget {
                 verticalMargin16,
                 Center(
                   child: Text(
-                    'App Version 0.0.1',
+                    'App Version $version',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ),

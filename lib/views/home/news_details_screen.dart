@@ -1,15 +1,10 @@
 import 'dart:developer';
 
 import 'package:analytics/analytics.dart';
-import 'package:appinio_social_share/appinio_social_share.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html_audio/flutter_html_audio.dart';
-import 'package:flutter_html_iframe/flutter_html_iframe.dart';
-import 'package:flutter_html_svg/flutter_html_svg.dart';
-import 'package:flutter_html_video/flutter_html_video.dart';
 import 'package:html/parser.dart' as parser;
 import 'package:mobile/constants/commons.dart';
 import 'package:mobile/get_it.dart';
@@ -196,10 +191,31 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: CachedNetworkImage(
-                imageUrl: widget.news.thumbnail!,
+            CachedNetworkImage(
+              imageUrl: widget.news.thumbnail!,
+              imageBuilder: (context, imageProvider) {
+                return AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                );
+              },
+              errorWidget: (context, url, error) {
+                return emptyWidget;
+              },
+            ),
+            verticalMargin8,
+            Padding(
+              padding: horizontalPadding12,
+              child: Text(
+                widget.news.title!,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
             verticalMargin12,
@@ -209,7 +225,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 children: [
                   CircleAvatar(
                     backgroundImage:
-                        NetworkImage(widget.news.publisherModel!.icon!),
+                    NetworkImage(widget.news.publisherModel!.icon!),
                     radius: 8,
                   ),
                   horizontalMargin12,
@@ -228,22 +244,9 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
             verticalMargin8,
             Padding(
               padding: horizontalPadding12,
-              child: Text(
-                widget.news.title!,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-            ),
-            Padding(
-              padding: horizontalPadding12,
               child: Html(
                 data: cleanHTML(widget.news.htmlBody!),
                 shrinkWrap: true,
-                extensions: const [
-                  IframeHtmlExtension(),
-                  SvgHtmlExtension(),
-                  VideoHtmlExtension(),
-                  AudioHtmlExtension(),
-                ],
                 doNotRenderTheseTags: const {
                   'figcaption',
                   'blockquote',

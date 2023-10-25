@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/constants/commons.dart';
 import 'package:mobile/state/blocs/news/news_bloc.dart';
+import 'package:mobile/views/error/error_screen.dart';
 import 'package:mobile/widgets/news_card.dart';
 import 'package:mobile/widgets/shimmer.dart';
 
@@ -33,11 +34,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               );
             } else if (state is NewsErrorState) {
-              return Center(
-                child: Text(
-                  state.message,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
+              return MyErrorScreen(
+                onTap: () {
+                  context.read<NewsBloc>().add(const NewsLoadEvent());
+                },
               );
             } else if (state is NewsLoadedState) {
               final newsList = state.newsList;
@@ -63,7 +63,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: ListView.separated(
                     itemBuilder: (context, index) {
                       final news = newsList[index];
-                      // return Center(child: Text(index.toString()));
                       return index % 5 == 0
                           ? Padding(
                               padding: horizontalPadding16 + verticalPadding4,
