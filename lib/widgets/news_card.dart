@@ -79,14 +79,24 @@ class SmallNewsCard extends StatelessWidget {
             ),
           ),
           horizontalMargin12,
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.network(
-              news.thumbnail!,
-              width: 85,
-              height: 80,
-              fit: BoxFit.cover,
-            ),
+          CachedNetworkImage(
+            imageUrl: news.thumbnail!,
+            imageBuilder: (context, imageProvider) {
+              return Container(
+                width: 85,
+                height: 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+            },
+            errorWidget: (context, url, error) {
+              return emptyWidget;
+            },
           ),
         ],
       ),
@@ -94,28 +104,49 @@ class SmallNewsCard extends StatelessWidget {
   }
 }
 
-class MediumNewsCard extends StatelessWidget {
+class MediumNewsCard extends StatefulWidget {
   const MediumNewsCard({required this.news, super.key});
 
   final NewsModel news;
 
   @override
+  State<MediumNewsCard> createState() => _MediumNewsCardState();
+}
+
+class _MediumNewsCardState extends State<MediumNewsCard> {
+  bool _isImageLoadFailed = false;
+  @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => _moveToNewsDetail(context, news),
-      onLongPress: () => newsButtonSheet(context, news),
+      onTap: () => _moveToNewsDetail(context, widget.news),
+      onLongPress: () => newsButtonSheet(context, widget.news),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AspectRatio(
-            aspectRatio: 16 / 9,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: CachedNetworkImage(
-                imageUrl: news.thumbnail!,
-                fit: BoxFit.cover,
-              ),
-            ),
+          CachedNetworkImage(
+            imageUrl: widget.news.thumbnail!,
+            imageBuilder: (context, imageProvider) {
+              return AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              );
+            },
+            errorListener: (obj) {
+              setState(() {
+                _isImageLoadFailed = true;
+              });
+            },
+            errorWidget: (context, url, error) {
+              return emptyWidget;
+            },
           ),
           verticalMargin12,
           Row(
@@ -123,14 +154,14 @@ class MediumNewsCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(4),
                 child: CachedNetworkImage(
-                  imageUrl: news.publisherModel!.icon!,
+                  imageUrl: widget.news.publisherModel!.icon!,
                   width: 16,
                   height: 16,
                 ),
               ),
               horizontalMargin12,
               Text(
-                news.publisherModel!.name!,
+                widget.news.publisherModel!.name!,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               horizontalMargin4,
@@ -140,89 +171,30 @@ class MediumNewsCard extends StatelessWidget {
               ),
               horizontalMargin4,
               Text(
-                getTimeAgo(news.publishedAt!),
+                getTimeAgo(widget.news.publishedAt!),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
           ),
           verticalMargin12,
           Text(
-            news.title!,
+            widget.news.title!,
             style: Theme.of(context)
                 .textTheme
                 .titleMedium!
                 .copyWith(fontWeight: FontWeight.bold),
           ),
+          if (_isImageLoadFailed) ...[
+            verticalMargin8,
+            Text(
+              widget.news.description!,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
           verticalMargin4,
           Text(
-            timeToRead(news.htmlBody!),
+            timeToRead(widget.news.htmlBody!),
             style: Theme.of(context).textTheme.bodySmall,
-          ),
-          verticalMargin8,
-        ],
-      ),
-    );
-  }
-}
-
-class LargeNewsCard extends StatelessWidget {
-  const LargeNewsCard({required this.news, super.key});
-
-  final NewsModel news;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => _moveToNewsDetail(context, news),
-      onLongPress: () => newsButtonSheet(context, news),
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: CachedNetworkImage(imageUrl: news.thumbnail!),
-          ),
-          verticalMargin12,
-          Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: CachedNetworkImage(
-                  imageUrl: news.publisherModel!.icon!,
-                  width: 16,
-                  height: 16,
-                ),
-              ),
-              horizontalMargin12,
-              Text(
-                news.publisherModel!.name!,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              horizontalMargin4,
-              Text(
-                '•',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              horizontalMargin4,
-              Text(
-                getTimeAgo(news.publishedAt!),
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
-          verticalMargin12,
-          Text(
-            news.title!,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          verticalMargin8,
-          Text(
-            news.description!,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.bodySmall,
-            textAlign: TextAlign.justify,
           ),
           verticalMargin8,
         ],

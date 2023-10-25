@@ -40,10 +40,10 @@ class RouteManager {
           builder: (_) => const MyFeedbackScreen(),
         );
       case MyRoutes.errorScreen:
-        final args = settings.arguments! as ErrorMessageArguments;
+        // final args = settings.arguments! as ErrorMessageArguments;
         return MaterialPageRoute(
           builder: (_) => MyErrorScreen(
-            message: args.details,
+            // message: args.details,
           ),
         );
       case MyRoutes.dashboardScreen:

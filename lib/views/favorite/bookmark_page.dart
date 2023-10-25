@@ -6,6 +6,7 @@ import 'package:mobile/extension/string.dart';
 import 'package:mobile/state/blocs/favorite/favorite_bloc.dart';
 import 'package:mobile/state/providers/favorite_state/favorite_state_provider.dart';
 import 'package:mobile/utils/date_time.dart';
+import 'package:mobile/views/error/error_screen.dart';
 import 'package:mobile/views/home/news_details_screen.dart';
 import 'package:mobile/widgets/shimmer.dart';
 import 'package:provider/provider.dart';
@@ -142,8 +143,12 @@ class MyBookmarkPage extends StatelessWidget {
                         ),
                       );
                     } else if (state is FavoriteError) {
-                      return Center(
-                        child: Text(state.toString()),
+                      return MyErrorScreen(
+                        onTap: () {
+                          context
+                              .read<FavoriteBloc>()
+                              .add(GetAllFavoriteEvent());
+                        },
                       );
                     }
 

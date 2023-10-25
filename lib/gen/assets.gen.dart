@@ -17,8 +17,11 @@ class $AssetsEnvGen {
   /// File path: assets/env/.env
   String get env => 'assets/env/.env';
 
+  /// File path: assets/env/.pro.env
+  String get pro => 'assets/env/.pro.env';
+
   /// List of all assets
-  List<String> get values => [env];
+  List<String> get values => [env, pro];
 }
 
 class $AssetsImagesGen {
@@ -40,6 +43,16 @@ class $AssetsImagesGen {
   List<AssetGenImage> get values => [anime, comics, game, icon];
 }
 
+class $AssetsLottieGen {
+  const $AssetsLottieGen();
+
+  /// File path: assets/lottie/error.lottie
+  String get error => 'assets/lottie/error.lottie';
+
+  /// List of all assets
+  List<String> get values => [error];
+}
+
 class $AssetsSvgGen {
   const $AssetsSvgGen();
 
@@ -58,6 +71,7 @@ class Assets {
 
   static const $AssetsEnvGen env = $AssetsEnvGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsLottieGen lottie = $AssetsLottieGen();
   static const $AssetsSvgGen svg = $AssetsSvgGen();
 }
 
