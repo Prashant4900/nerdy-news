@@ -1,5 +1,5 @@
 // Env Reader Auto-Generated Model File
-// Created at 2023-10-07 18:28:56.334882
+// Created at 2023-10-27 01:02:14.911147
 // 🍔 [Buy me a coffee](https://www.buymeacoffee.com/nialixus) 🚀
 import 'package:env_reader/env_reader.dart';
 
@@ -39,5 +39,17 @@ class EnvModel {
   /// Env.read<String>('IOS_CLIENT_ID') ?? 'IOS_CLIENT_ID';
   /// ```
   static String iosClientId = Env.read<String>('IOS_CLIENT_ID') ?? 'IOS_CLIENT_ID';
+
+  /// Value of `BANNER_ADS_ID` in environment variable. This is equal to
+  /// ```dart
+  /// Env.read<String>('BANNER_ADS_ID') ?? 'BANNER_ADS_ID';
+  /// ```
+  static String bannerAdsId = Env.read<String>('BANNER_ADS_ID') ?? 'BANNER_ADS_ID';
+
+  /// Value of `NATIVE_ADS_ID` in environment variable. This is equal to
+  /// ```dart
+  /// Env.read<String>('NATIVE_ADS_ID') ?? 'NATIVE_ADS_ID';
+  /// ```
+  static String nativeAdsId = Env.read<String>('NATIVE_ADS_ID') ?? 'NATIVE_ADS_ID';
 
 }
