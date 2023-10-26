@@ -5,7 +5,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:html/parser.dart' as parser;
+import 'package:mobile/ads/ads_state.dart';
 import 'package:mobile/constants/commons.dart';
 import 'package:mobile/get_it.dart';
 import 'package:mobile/state/blocs/favorite/favorite_bloc.dart';
@@ -31,6 +33,7 @@ class NewsDetailScreen extends StatefulWidget {
 class _NewsDetailScreenState extends State<NewsDetailScreen> {
   bool _isSaved = false;
   bool _isReaderMode = false;
+  BannerAd? bannerAd;
 
   @override
   void initState() {
@@ -38,6 +41,22 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     webViewInit();
     _setReaderMode();
     _isArticleSaved();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final adState = Provider.of<AdState>(context);
+    adState.initialization.then((status) {
+      setState(() {
+        bannerAd = BannerAd(
+          size: AdSize.mediumRectangle,
+          adUnitId: adState.bannerAdsID,
+          listener: adState.bannerAdListener,
+          request: const AdRequest(),
+        )..load();
+      });
+    });
   }
 
   late WebViewController controller;
@@ -127,6 +146,11 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
           Expanded(
             child: _isReaderMode ? _renderReaderView() : _renderWebView(),
           ),
+          if (bannerAd != null)
+            SizedBox(
+              height: 50,
+              child: AdWidget(ad: bannerAd!),
+            ),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -225,7 +249,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 children: [
                   CircleAvatar(
                     backgroundImage:
-                    NetworkImage(widget.news.publisherModel!.icon!),
+                        NetworkImage(widget.news.publisherModel!.icon!),
                     radius: 8,
                   ),
                   horizontalMargin12,
@@ -274,7 +298,6 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 },
               ),
             ),
-            verticalMargin12,
           ],
         ),
       );
