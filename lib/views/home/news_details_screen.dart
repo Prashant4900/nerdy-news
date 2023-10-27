@@ -51,12 +51,20 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
       setState(() {
         bannerAd = BannerAd(
           size: AdSize.mediumRectangle,
-          adUnitId: adState.bannerAdsID,
+          adUnitId: adState.bannerAdsImageOnlyID,
           listener: adState.bannerAdListener,
           request: const AdRequest(),
         )..load();
       });
     });
+  }
+
+  @override
+  void dispose() {
+    if (bannerAd != null) {
+      bannerAd!.dispose();
+    }
+    super.dispose();
   }
 
   late WebViewController controller;
@@ -147,8 +155,11 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
             child: _isReaderMode ? _renderReaderView() : _renderWebView(),
           ),
           if (bannerAd != null)
-            SizedBox(
-              height: 50,
+            ConstrainedBox(
+              constraints: const BoxConstraints(
+                // minHeight: 50,
+                maxHeight: 50,
+              ),
               child: AdWidget(ad: bannerAd!),
             ),
         ],

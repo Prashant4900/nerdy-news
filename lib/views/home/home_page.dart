@@ -164,10 +164,17 @@ class _LoadNativeAdsState extends State<LoadNativeAds> {
   @override
   Widget build(BuildContext context) {
     return bannerAd != null
-        ? SizedBox(
-            height: 50,
+        ? ConstrainedBox(
+            constraints: const BoxConstraints(
+              minHeight: 50,
+              maxHeight: 200,
+            ),
             child: AdWidget(ad: bannerAd!),
           )
+        // SizedBox(
+        //     height: 50,
+        //     child: AdWidget(ad: bannerAd!),
+        //   )
         : emptyWidget;
     // return flag
     //     ? ConstrainedBox(
