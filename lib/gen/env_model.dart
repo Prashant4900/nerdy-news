@@ -58,4 +58,10 @@ class EnvModel {
   /// ```
   static String nativeAdsId = Env.read<String>('NATIVE_ADS_ID') ?? 'NATIVE_ADS_ID';
 
+  /// Value of `NATIVE_ADS_IMAGE_ONLY_ID` in environment variable. This is equal to
+  /// ```dart
+  /// Env.read<String>('NATIVE_ADS_IMAGE_ONLY_ID') ?? 'NATIVE_ADS_IMAGE_ONLY_ID';
+  /// ```
+  static String nativeAdsImageOnlyId = Env.read<String>('NATIVE_ADS_IMAGE_ONLY_ID') ?? 'NATIVE_ADS_IMAGE_ONLY_ID';
+
 }

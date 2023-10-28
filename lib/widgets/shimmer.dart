@@ -57,6 +57,8 @@ class NewsListShimmerWidget extends StatelessWidget {
             SmallSkeletonNewsCard(),
             verticalMargin16,
             SmallSkeletonNewsCard(),
+            verticalMargin16,
+            SmallSkeletonNewsCard(),
           ],
         ),
       ),

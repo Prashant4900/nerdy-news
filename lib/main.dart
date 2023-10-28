@@ -19,7 +19,7 @@ Future<void> main() async {
       final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
       FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
       await Env.load(
-        source: EnvLoader.asset('assets/env/.pro.env'),
+        source: EnvLoader.asset('assets/env/.env'),
         password: 'NerdyNews490',
       );
       await Firebase.initializeApp();
@@ -29,6 +29,13 @@ Future<void> main() async {
       await SupabaseConfig.init();
       await setup();
       final initialization = MobileAds.instance.initialize();
+      await initialization.then((value) {
+        RequestConfiguration(
+          tagForChildDirectedTreatment:
+              TagForChildDirectedTreatment.unspecified,
+          testDeviceIds: ['BEBE06B3C5D72F30071F853BEB6F5512'],
+        );
+      });
       final adsState = AdState(initialization);
       FlutterNativeSplash.remove();
       runApp(

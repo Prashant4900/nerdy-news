@@ -47,3 +47,7 @@ adb:
 env:
 	dart run env_reader --input=".pro.env" --password="NerdyNews490" --model="lib/gen/env_model.dart" --null-safety
 
+.PHONY: dev-env
+dev-env:
+	dart run env_reader --input=".env" --password="NerdyNews490" --model="lib/gen/env_model.dart" --null-safety
+
