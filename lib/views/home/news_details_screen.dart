@@ -3,13 +3,9 @@ import 'dart:developer';
 import 'package:analytics/analytics.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:html/parser.dart' as parser;
-import 'package:mobile/ads/ads_state.dart';
 import 'package:mobile/ads/banner_ads_widgets.dart';
 import 'package:mobile/constants/commons.dart';
 import 'package:mobile/get_it.dart';
@@ -36,8 +32,6 @@ class NewsDetailScreen extends StatefulWidget {
 class _NewsDetailScreenState extends State<NewsDetailScreen> {
   bool _isSaved = false;
   bool _isReaderMode = false;
-  BannerAd? bannerAd;
-  bool buttonShow = true;
 
   @override
   void initState() {
@@ -45,22 +39,6 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     webViewInit();
     _setReaderMode();
     _isArticleSaved();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final adState = Provider.of<AdState>(context);
-    adState.initialization.then((status) {
-      setState(() {
-        bannerAd = BannerAd(
-          size: AdSize.banner,
-          adUnitId: adState.bannerAdsImageOnlyId,
-          listener: adState.bannerAdListener,
-          request: const AdRequest(),
-        )..load();
-      });
-    });
   }
 
   late WebViewController controller;
@@ -92,29 +70,6 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     await controller.loadRequest(
       Uri.parse(widget.news.source!),
     );
-  }
-
-  // void scrollToTop() {
-  //   controller.runJavaScript("window.scrollTo({top: 0, behavior: 'smooth'});");
-  //   // floatingButtonVisibility();
-  // }
-
-  void floatingButtonVisibility(double scrollDelta) {
-    if (scrollDelta < 0) {
-      // Scrolling down
-      if (buttonShow) {
-        setState(() {
-          buttonShow = false;
-        });
-      }
-    } else {
-      // Scrolling up
-      if (!buttonShow) {
-        setState(() {
-          buttonShow = true;
-        });
-      }
-    }
   }
 
   Future<void> _setReaderMode() async {
@@ -176,60 +131,57 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
           BannerAdWidget(key: Key(widget.key.toString())),
         ],
       ),
-      bottomNavigationBar: Visibility(
-        visible: buttonShow,
-        child: BottomAppBar(
-          height: 56,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back),
-              ),
-              IconButton(
-                onPressed: () => setState(() => _isReaderMode = !_isReaderMode),
-                icon: _isReaderMode
-                    ? const Icon(CupertinoIcons.book_fill)
-                    : const Icon(CupertinoIcons.book),
-              ),
-              IconButton(
-                onPressed: () {
-                  try {
-                    if (_isSaved) {
-                      context.read<FavoriteBloc>().add(
-                            DeleteFavoriteEvent(news: widget.news),
-                          );
-                      setState(() => _isSaved = false);
-                    } else {
-                      context.read<FavoriteBloc>().add(
-                            AddTOFavoriteEvent(news: widget.news),
-                          );
-                      setState(() => _isSaved = true);
-                    }
-                  } catch (e) {
-                    log(e.toString());
+      bottomNavigationBar: BottomAppBar(
+        height: 56,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.arrow_back),
+            ),
+            IconButton(
+              onPressed: () => setState(() => _isReaderMode = !_isReaderMode),
+              icon: _isReaderMode
+                  ? const Icon(CupertinoIcons.book_fill)
+                  : const Icon(CupertinoIcons.book),
+            ),
+            IconButton(
+              onPressed: () {
+                try {
+                  if (_isSaved) {
+                    context.read<FavoriteBloc>().add(
+                          DeleteFavoriteEvent(news: widget.news),
+                        );
+                    setState(() => _isSaved = false);
+                  } else {
+                    context.read<FavoriteBloc>().add(
+                          AddTOFavoriteEvent(news: widget.news),
+                        );
+                    setState(() => _isSaved = true);
                   }
-                },
-                icon: _isSaved
-                    ? const Icon(Icons.bookmark)
-                    : const Icon(Icons.bookmark_border),
-              ),
-              IconButton(
-                onPressed: () => Share.share(
-                  'Hey Checkout this News ${widget.news.source}',
-                  subject: widget.news.title,
-                ).whenComplete(
-                  () async => appAnalytics.log(
-                    LogEvent.share,
-                    newsID: widget.news.id,
-                    newsTitle: widget.news.title,
-                  ),
+                } catch (e) {
+                  log(e.toString());
+                }
+              },
+              icon: _isSaved
+                  ? const Icon(Icons.bookmark)
+                  : const Icon(Icons.bookmark_border),
+            ),
+            IconButton(
+              onPressed: () => Share.share(
+                'Hey Checkout this News ${widget.news.source}',
+                subject: widget.news.title,
+              ).whenComplete(
+                () async => appAnalytics.log(
+                  LogEvent.share,
+                  newsID: widget.news.id,
+                  newsTitle: widget.news.title,
                 ),
-                icon: const Icon(Icons.share),
               ),
-            ],
-          ),
+              icon: const Icon(Icons.share),
+            ),
+          ],
         ),
       ),
     );
@@ -237,14 +189,6 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
 
   Widget _renderWebView() => WebViewWidget(
         controller: controller,
-        gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{}..add(
-            Factory<VerticalDragGestureRecognizer>(
-              () => VerticalDragGestureRecognizer()
-                ..onUpdate = (details) {
-                  floatingButtonVisibility(details.primaryDelta!);
-                },
-            ),
-          ),
       );
 
   Widget _renderReaderView() => GestureDetector(

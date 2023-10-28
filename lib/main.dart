@@ -18,10 +18,18 @@ Future<void> main() async {
     () async {
       final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
       FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-      await Env.load(
-        source: EnvLoader.asset('assets/env/.env'),
-        password: 'NerdyNews490',
-      );
+      if (kDebugMode) {
+        await Env.load(
+          source: EnvLoader.asset('assets/env/.env'),
+          password: 'NerdyNews490',
+        );
+      } else {
+        await Env.load(
+          source: EnvLoader.asset('assets/env/.pro.env'),
+          password: 'NerdyNews490',
+        );
+      }
+
       await Firebase.initializeApp();
 
       await AppAnalytics.init();

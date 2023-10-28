@@ -69,10 +69,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       if (index % 5 == 0) {
                         return Padding(
                           padding: horizontalPadding16 + verticalPadding4,
-                          // child: MediumNewsCard(news: news),
-                          child: SmallNewsCard(news: news),
+                          child: MediumNewsCard(news: news),
                         );
-                      } else if (index == 1) {
+                      } else if (index % 13 == 0) {
                         return Column(
                           children: [
                             Padding(

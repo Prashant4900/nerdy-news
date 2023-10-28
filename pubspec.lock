@@ -28,8 +28,8 @@ packages:
   analytics:
     dependency: "direct main"
     description:
-      path: "/Volumes/Work/projects/news/nerdy-news/mobile/packages/analytics"
-      relative: false
+      path: "packages/analytics"
+      relative: true
     source: path
     version: "0.1.0+1"
   analyzer:
