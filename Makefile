@@ -19,10 +19,11 @@ clean:
 .PHONY: abb
 abb:
 	make clean
-	flutter build appbundle
+	flutter build --release appbundle
 
 .PHONY: build
 build:
+	flutter pub get
 	dart run build_runner build --delete-conflicting-outputs
 
 .PHONY: watch
@@ -35,6 +36,7 @@ fix:
 
 .PHONY: splash
 splash:
+	flutter pub get
 	dart run flutter_native_splash:create
 
 .PHONY: adb

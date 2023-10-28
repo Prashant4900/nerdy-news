@@ -59,11 +59,14 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon.svg
   SvgGenImage get icon => const SvgGenImage('assets/svg/icon.svg');
 
+  /// File path: assets/svg/logo.svg
+  SvgGenImage get logo => const SvgGenImage('assets/svg/logo.svg');
+
   /// File path: assets/svg/x-twitter.svg
   SvgGenImage get xTwitter => const SvgGenImage('assets/svg/x-twitter.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [icon, xTwitter];
+  List<SvgGenImage> get values => [icon, logo, xTwitter];
 }
 
 class Assets {
