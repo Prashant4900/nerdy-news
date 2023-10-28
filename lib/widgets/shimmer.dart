@@ -53,11 +53,9 @@ class NewsListShimmerWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             MediumSkeletonNewsCard(),
-            verticalMargin16,
+            verticalMargin24,
             SmallSkeletonNewsCard(),
-            verticalMargin16,
-            SmallSkeletonNewsCard(),
-            verticalMargin16,
+            verticalMargin24,
             SmallSkeletonNewsCard(),
           ],
         ),

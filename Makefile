@@ -19,7 +19,7 @@ clean:
 .PHONY: abb
 abb:
 	make clean
-	flutter build --release appbundle
+	flutter build appbundle
 
 .PHONY: build
 build:
