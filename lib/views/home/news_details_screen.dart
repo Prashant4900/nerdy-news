@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:analytics/analytics.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:html/parser.dart' as parser;
 import 'package:mobile/ads/banner_ads_widgets.dart';
 import 'package:mobile/constants/commons.dart';
-import 'package:mobile/get_it.dart';
 import 'package:mobile/state/blocs/favorite/favorite_bloc.dart';
 import 'package:mobile/state/cubits/reader_mode/reader_mode_provider.dart';
 import 'package:mobile/state/providers/favorite_state/favorite_state_provider.dart';
@@ -16,7 +14,6 @@ import 'package:mobile/utils/date_time.dart';
 import 'package:mobile/views/home/bottom_sheet.dart';
 import 'package:news/news.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -105,8 +102,29 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
             ),
           ],
         ),
-        leading: emptyWidget,
         actions: [
+          InkWell(
+            onTap: () {
+              try {
+                if (_isSaved) {
+                  context.read<FavoriteBloc>().add(
+                        DeleteFavoriteEvent(news: widget.news),
+                      );
+                  setState(() => _isSaved = false);
+                } else {
+                  context.read<FavoriteBloc>().add(
+                        AddTOFavoriteEvent(news: widget.news),
+                      );
+                  setState(() => _isSaved = true);
+                }
+              } catch (e) {
+                log(e.toString());
+              }
+            },
+            child: _isSaved
+                ? const Icon(Icons.bookmark)
+                : const Icon(Icons.bookmark_border),
+          ),
           IconButton(
             onPressed: () {
               newsButtonSheet(context, widget.news);
@@ -131,57 +149,20 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
           BannerAdWidget(key: Key(widget.key.toString())),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
-        height: 56,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.arrow_back),
-            ),
-            IconButton(
-              onPressed: () => setState(() => _isReaderMode = !_isReaderMode),
-              icon: _isReaderMode
-                  ? const Icon(CupertinoIcons.book_fill)
-                  : const Icon(CupertinoIcons.book),
-            ),
-            IconButton(
-              onPressed: () {
-                try {
-                  if (_isSaved) {
-                    context.read<FavoriteBloc>().add(
-                          DeleteFavoriteEvent(news: widget.news),
-                        );
-                    setState(() => _isSaved = false);
-                  } else {
-                    context.read<FavoriteBloc>().add(
-                          AddTOFavoriteEvent(news: widget.news),
-                        );
-                    setState(() => _isSaved = true);
-                  }
-                } catch (e) {
-                  log(e.toString());
-                }
-              },
-              icon: _isSaved
-                  ? const Icon(Icons.bookmark)
-                  : const Icon(Icons.bookmark_border),
-            ),
-            IconButton(
-              onPressed: () => Share.share(
-                'Hey Checkout this News ${widget.news.source}',
-                subject: widget.news.title,
-              ).whenComplete(
-                () async => appAnalytics.log(
-                  LogEvent.share,
-                  newsID: widget.news.id,
-                  newsTitle: widget.news.title,
+      floatingActionButton: Padding(
+        padding: bottomPadding48,
+        child: FloatingActionButton(
+          backgroundColor: Theme.of(context).colorScheme.background,
+          onPressed: () => setState(() => _isReaderMode = !_isReaderMode),
+          child: _isReaderMode
+              ? Icon(
+                  CupertinoIcons.book_fill,
+                  color: Theme.of(context).colorScheme.onBackground,
+                )
+              : Icon(
+                  CupertinoIcons.book,
+                  color: Theme.of(context).colorScheme.onBackground,
                 ),
-              ),
-              icon: const Icon(Icons.share),
-            ),
-          ],
         ),
       ),
     );

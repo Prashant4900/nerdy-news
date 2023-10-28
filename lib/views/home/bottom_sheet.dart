@@ -1,9 +1,12 @@
 import 'package:akar_icons_flutter/akar_icons_flutter.dart';
+import 'package:analytics/analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/commons.dart';
+import 'package:mobile/get_it.dart';
 import 'package:mobile/routes/routes.dart';
 import 'package:mobile/utils/utils.dart';
 import 'package:news/news.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<void> _launchUrl(String url) async {
@@ -32,6 +35,20 @@ Future<dynamic> newsButtonSheet(BuildContext context, NewsModel news) {
                 arguments: ShareNewsArguments(newsModel: news),
               );
             },
+          ),
+          ListTile(
+            leading: const Icon(Icons.share),
+            title: const Text('Share News URL'),
+            onTap: () => Share.share(
+              'Hey Checkout this News ${news.source}',
+              subject: news.title,
+            ).whenComplete(
+              () async => appAnalytics.log(
+                LogEvent.share,
+                newsID: news.id,
+                newsTitle: news.title,
+              ),
+            ),
           ),
           ListTile(
             leading: const Icon(AkarIcons.link_chain),

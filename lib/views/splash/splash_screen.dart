@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:analytics/analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/commons.dart';
 import 'package:mobile/gen/assets.gen.dart';
+import 'package:mobile/gen/colors.gen.dart';
 import 'package:mobile/get_it.dart';
 import 'package:mobile/routes/routes.dart';
 import 'package:mobile/services/cache_helper.dart';
@@ -48,21 +48,21 @@ class _MySplashScreenState extends State<MySplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: SizedBox(
         width: MediaQuery.sizeOf(context).width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Assets.svg.icon.svg(
-              width: 80,
-              color: Theme.of(context).colorScheme.onBackground,
-            ),
-            verticalMargin24,
-            const SizedBox(
+            Assets.svg.logo.svg(
               width: 150,
+              color: isDarkTheme ? MyColors.textDark : null,
+            ),
+            const SizedBox(
+              width: 80,
               child: LinearProgressIndicator(
-                minHeight: .5,
+                minHeight: .7,
               ),
             ),
           ],
