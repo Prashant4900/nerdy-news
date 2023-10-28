@@ -1,5 +1,5 @@
 // Env Reader Auto-Generated Model File
-// Created at 2023-10-28 00:26:45.771826
+// Created at 2023-10-27 01:19:53.601490
 // 🍔 [Buy me a coffee](https://www.buymeacoffee.com/nialixus) 🚀
 import 'package:env_reader/env_reader.dart';
 
