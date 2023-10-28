@@ -10,7 +10,7 @@ import 'package:mobile/state/cubits/reader_mode/reader_mode_cubit.dart';
 import 'package:mobile/state/cubits/reader_mode/reader_mode_provider.dart';
 import 'package:mobile/state/cubits/theme/theme_cubit.dart';
 import 'package:mobile/state/providers/favorite_state/favorite_state_provider.dart';
-import 'package:mobile/views/start_screen.dart';
+import 'package:mobile/views/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
@@ -74,10 +74,10 @@ class MyMaterialApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeManager.lightTheme(),
       darkTheme: ThemeManager.darkTheme(),
-      // themeMode: ThemeMode.dark,
+      // themeMode: ThemeMode.light,
       themeMode: themeMode,
       onGenerateRoute: RouteManager.generateRoute,
-      home: const MyStartScreen(),
+      home: const MySplashScreen(),
     );
   }
 }

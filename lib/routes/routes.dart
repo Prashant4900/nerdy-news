@@ -6,12 +6,14 @@ import 'package:mobile/views/profile/feedback_screen.dart';
 import 'package:mobile/views/profile/privacy_policy_screen.dart';
 import 'package:mobile/views/profile/terms_screen.dart';
 import 'package:mobile/views/share/share_image_screen.dart';
+import 'package:mobile/views/start_screen.dart';
 import 'package:news/news.dart';
 
 part 'models.dart';
 
 class MyRoutes {
   static const String newsDetailScreen = '/newsDetailScreen';
+  static const String startScreen = '/startScreen';
   static const String dashboardScreen = '/dashboard';
   static const String feedbackScreen = '/feedbackScreen';
   static const String errorScreen = '/errorScreen';
@@ -42,13 +44,17 @@ class RouteManager {
       case MyRoutes.errorScreen:
         // final args = settings.arguments! as ErrorMessageArguments;
         return MaterialPageRoute(
-          builder: (_) => MyErrorScreen(
-            // message: args.details,
-          ),
+          builder: (_) => const MyErrorScreen(
+              // message: args.details,
+              ),
         );
       case MyRoutes.dashboardScreen:
         return MaterialPageRoute(
           builder: (_) => const MyDashboard(),
+        );
+      case MyRoutes.startScreen:
+        return MaterialPageRoute(
+          builder: (_) => const MyStartScreen(),
         );
       case MyRoutes.privacyPolicyScreen:
         return MaterialPageRoute(

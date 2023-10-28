@@ -12,7 +12,11 @@ class AdState {
 
   String get bannerAdsID => EnvModel.bannerAdsId;
 
+  String get bannerAdsImageOnlyId => EnvModel.bannerAdsImageOnlyId;
+
   String get nativeAdsID => EnvModel.nativeAdsId;
+
+  String get nativeAdsImageOnlyId => EnvModel.nativeAdsImageOnlyId;
 
   BannerAdListener get bannerAdListener => _bannerAdListener;
 
