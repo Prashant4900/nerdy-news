@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/commons.dart';
 import 'package:mobile/extension/string.dart';
 import 'package:mobile/gen/assets.gen.dart';
+import 'package:mobile/models/news_model.dart';
 import 'package:mobile/utils/date_time.dart';
 import 'package:mobile/utils/time_to_read.dart';
-import 'package:news/model/model.dart';
+// import 'package:news/model/model.dart';
 
 class PublisherWidget extends StatelessWidget {
   const PublisherWidget({
-    required this.news, super.key,
+    required this.news,
+    super.key,
   });
 
   final NewsModel news;

@@ -1,0 +1,99 @@
+{
+  "data": [
+    {
+      "contentKey": "appName",
+      "englishContent": "The Culture News",
+      "hindiContent": "The Culture News"
+    },
+    {
+      "contentKey": "signInWithGoogle",
+      "englishContent": "Sign In With Google",
+      "hindiContent": "Google से साइन इन करें"
+    },
+    {
+      "contentKey": "discoverTheBestArticleText",
+      "englishContent": "Discover the best articles from around the world",
+      "hindiContent": "दुनिया भर से सर्वोत्तम लेख खोजें"
+    },
+    {
+      "contentKey": "exploreMoreThenText",
+      "englishContent": "Explore more then 50+ healthy food made specially for you",
+      "hindiContent": "विशेष रूप से आपके लिए बनाए गए 50 से अधिक स्वस्थ भोजन का अन्वेषण करें"
+    },
+    {
+      "contentKey": "byReadingTheCulturalText",
+      "englishContent": "By Reading The Cultural News, you accept our",
+      "hindiContent": "The Cultural News, पढ़कर आप हमारी बात मानते हैं"
+    },
+    {
+      "contentKey": "termAndCondition",
+      "englishContent": "Terms and Conditions",
+      "hindiContent": "नियम और शर्तें"
+    },
+    {
+      "contentKey": "privacyPolicy",
+      "englishContent": "Privacy Policy",
+      "hindiContent": "गोपनीयता नीति"
+    },
+    {
+      "contentKey": "abc",
+      "englishContent": "By Reading The Cultural News, you accept our %s & %s.",
+      "hindiContent": "The Cultural News पढ़कर, आप हमारे %s और %s स्वीकार करते हैं।"
+    },
+    {
+      "contentKey": "chooseYourPrefLang",
+      "englishContent": "Choose Your Preferred Language",
+      "hindiContent": "अपनी पसंदीदा भाषा चुनें"
+    },
+    {
+      "contentKey": "plsSelectYourLang",
+      "englishContent": "Please Select your Language",
+      "hindiContent": "कृपया अपनी भाषा चुनें"
+    },
+    {
+      "contentKey": "skip",
+      "englishContent": "Skip",
+      "hindiContent": "आगे बढ़े"
+    },
+    {
+      "contentKey": "search",
+      "englishContent": "Search",
+      "hindiContent": "खोजे"
+    },
+    {
+      "contentKey": "publishers",
+      "englishContent": "Publishers",
+      "hindiContent": "प्रकाशक"
+    },
+    {
+      "contentKey": "recentSearch",
+      "englishContent": "Recent Searches",
+      "hindiContent": "हाल की खोजें"
+    },
+    {
+      "contentKey": "anime",
+      "englishContent": "Anime",
+      "hindiContent": "एनिमे"
+    },
+    {
+      "contentKey": "comic & books",
+      "englishContent": "Comics & Books",
+      "hindiContent": "कॉमिक्स और किताबें"
+    },
+    {
+      "contentKey": "games",
+      "englishContent": "Games",
+      "hindiContent": "खेल"
+    },
+    {
+      "contentKey": "movies",
+      "englishContent": "Movies",
+      "hindiContent": "फ़िल्म"
+    },
+    {
+      "contentKey": "tv series & shows",
+      "englishContent": "TV Series & Shows",
+      "hindiContent": "टीवी श्रृंखला और शो"
+    }
+  ]
+}

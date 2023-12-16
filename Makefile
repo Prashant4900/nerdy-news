@@ -6,10 +6,7 @@ apk:
 .PHONY: get
 get:
 	flutter pub get
-	flutter pub get --directory ./packages/auth
-	flutter pub get --directory ./packages/feedback
 	flutter pub get --directory ./packages/analytics
-	flutter pub get --directory ./packages/news
 
 .PHONY: clean
 clean:
@@ -47,9 +44,11 @@ adb:
 
 .PHONY: env
 env:
+	make get
 	dart run env_reader --input=".pro.env" --password="NerdyNews490" --model="lib/gen/env_model.dart" --null-safety
 
 .PHONY: dev-env
 dev-env:
+	make get
 	dart run env_reader --input=".env" --password="NerdyNews490" --model="lib/gen/env_model.dart" --null-safety
 

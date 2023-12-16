@@ -25,7 +25,7 @@
 
 
     <application
-        android:label="Nerdy News"
+        android:label="The Cultural News"
         android:name="${applicationName}"
         android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">

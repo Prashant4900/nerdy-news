@@ -12,6 +12,12 @@ class ShareNewsArguments {
   final NewsModel newsModel;
 }
 
+class PublisherArguments {
+  PublisherArguments({required this.model});
+
+  final PublisherModel model;
+}
+
 class ErrorMessageArguments {
   ErrorMessageArguments({required this.details});
 

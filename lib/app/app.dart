@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/constants/theme_manager.dart';
+import 'package:mobile/feature/feedback/bloc/feedback_bloc.dart';
+import 'package:mobile/providers/reader_mode_provider.dart';
+import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/routes/routes.dart';
-import 'package:mobile/state/blocs/auth/auth_bloc.dart';
-import 'package:mobile/state/blocs/favorite/favorite_bloc.dart';
-import 'package:mobile/state/blocs/feedback/feedback_bloc.dart';
-import 'package:mobile/state/blocs/news/news_bloc.dart';
-import 'package:mobile/state/cubits/reader_mode/reader_mode_cubit.dart';
-import 'package:mobile/state/cubits/reader_mode/reader_mode_provider.dart';
-import 'package:mobile/state/cubits/theme/theme_cubit.dart';
-import 'package:mobile/state/providers/favorite_state/favorite_state_provider.dart';
+import 'package:mobile/views/auth/bloc/auth_bloc.dart';
+import 'package:mobile/views/search/bloc/search_bloc.dart';
 import 'package:mobile/views/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -21,17 +18,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        ChangeNotifierProvider<FavoriteStateProvider>(
-          create: (context) => FavoriteStateProvider(),
-        ),
         ChangeNotifierProvider<ReaderModeProvider>(
           create: (context) => ReaderModeProvider(),
         ),
-        BlocProvider<ThemeCubit>(
-          create: (context) => ThemeCubit()..getTheme(),
+        ChangeNotifierProvider<ThemeProvider>(
+          create: (context) => ThemeProvider(),
         ),
-        BlocProvider<ReaderModeCubit>(
-          create: (context) => ReaderModeCubit()..getReaderMode(),
+        BlocProvider<SearchBloc>(
+          create: (context) =>
+              SearchBloc()..add(const GetPublishersListEvent()),
         ),
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc()..add(UserStatusEvent()),
@@ -39,20 +34,12 @@ class MyApp extends StatelessWidget {
         BlocProvider<FeedbackBloc>(
           create: (context) => FeedbackBloc(),
         ),
-        BlocProvider<FavoriteBloc>(
-          create: (context) => FavoriteBloc()..add(GetAllFavoriteEvent()),
-        ),
-        BlocProvider<NewsBloc>(
-          create: (context) => NewsBloc()..add(const NewsLoadEvent()),
-        ),
       ],
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, state) {
-          if (state is ThemeChanged) {
-            return MyMaterialApp(themeMode: state.themeMode);
-          } else {
-            return const SizedBox.shrink();
-          }
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          final themeMode = themeProvider.themeMode;
+
+          return MyMaterialApp(themeMode: themeMode);
         },
       ),
     );
@@ -70,11 +57,10 @@ class MyMaterialApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'The Cultural News',
       debugShowCheckedModeBanner: false,
       theme: ThemeManager.lightTheme(),
       darkTheme: ThemeManager.darkTheme(),
-      // themeMode: ThemeMode.light,
       themeMode: themeMode,
       onGenerateRoute: RouteManager.generateRoute,
       home: const MySplashScreen(),

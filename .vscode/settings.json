@@ -4,12 +4,16 @@
         "appauth",
         "appinio",
         "blockquote",
+        "categorymodel",
         "datetime",
         "endtemplate",
         "Entitys",
         "Favorited",
         "figcaption",
         "flutterfire",
+        "ilike",
+        "newsmodel",
         "Schyler"
-    ]
+    ],
+    "editor.inlineSuggest.showToolbar": "onHover"
 }

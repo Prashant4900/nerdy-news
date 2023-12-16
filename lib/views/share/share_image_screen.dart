@@ -4,16 +4,16 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:akar_icons_flutter/akar_icons_flutter.dart';
-import 'package:analytics/analytics.dart';
 import 'package:appinio_social_share/appinio_social_share.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:mobile/analytics/analytics.dart';
 import 'package:mobile/constants/commons.dart';
 import 'package:mobile/gen/assets.gen.dart';
 import 'package:mobile/get_it.dart';
+import 'package:mobile/models/news_model.dart';
 import 'package:mobile/views/share/news_cards.dart';
 import 'package:mobile/widgets/buttons.dart';
-import 'package:news/news.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';

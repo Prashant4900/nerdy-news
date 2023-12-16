@@ -33,6 +33,7 @@ class CustomElevatedButton extends StatelessWidget {
             label,
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: textColor ?? Theme.of(context).colorScheme.background,
+                  fontWeight: FontWeight.w500,
                 ),
           ),
         ),
@@ -97,10 +98,11 @@ class CustomTextButton extends StatelessWidget {
         padding: verticalPadding4 + horizontalPadding8,
         child: Text(
           label,
-          style: TextStyle(
-            decoration: TextDecoration.underline,
-            color: textColor,
-          ),
+          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                decoration: TextDecoration.underline,
+                color: textColor,
+              ),
+          textAlign: TextAlign.center,
         ),
       ),
     );

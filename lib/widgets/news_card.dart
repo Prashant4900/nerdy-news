@@ -1,16 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/commons.dart';
+import 'package:mobile/models/news_model.dart';
 import 'package:mobile/routes/routes.dart';
-import 'package:mobile/state/providers/favorite_state/favorite_state_provider.dart';
 import 'package:mobile/utils/date_time.dart';
 import 'package:mobile/utils/time_to_read.dart';
 import 'package:mobile/views/home/bottom_sheet.dart';
-import 'package:news/news.dart';
-import 'package:provider/provider.dart';
 
 void _moveToNewsDetail(BuildContext context, NewsModel news) {
-  Provider.of<FavoriteStateProvider>(context, listen: false).isBookmarked(news);
   Navigator.pushNamed(
     context,
     MyRoutes.newsDetailScreen,
@@ -36,11 +33,17 @@ class SmallNewsCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
-                      foregroundImage: NetworkImage(news.publisherModel!.icon!),
-                      radius: 7,
+                    Container(
+                      width: 14,
+                      height: 14,
+                      padding: allPadding2,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Image.network(news.publisherModel!.icon!),
                     ),
-                    horizontalMargin4,
+                    horizontalMargin8,
                     Text(
                       news.publisherModel!.name!,
                       style: Theme.of(context).textTheme.bodySmall,
@@ -151,15 +154,17 @@ class _MediumNewsCardState extends State<MediumNewsCard> {
           verticalMargin12,
           Row(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: CachedNetworkImage(
-                  imageUrl: widget.news.publisherModel!.icon!,
-                  width: 16,
-                  height: 16,
+              Container(
+                width: 14,
+                height: 14,
+                padding: allPadding2,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(4),
                 ),
+                child: Image.network(widget.news.publisherModel!.icon!),
               ),
-              horizontalMargin12,
+              horizontalMargin8,
               Text(
                 widget.news.publisherModel!.name!,
                 style: Theme.of(context).textTheme.bodySmall,

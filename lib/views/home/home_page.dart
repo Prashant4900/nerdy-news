@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/ads/native_ads_widgets.dart';
 import 'package:mobile/constants/commons.dart';
-import 'package:mobile/state/blocs/news/news_bloc.dart';
-import 'package:mobile/views/error/error_screen.dart';
+import 'package:mobile/models/news_model.dart';
+import 'package:mobile/views/home/bloc/home_bloc.dart';
 import 'package:mobile/widgets/news_card.dart';
 import 'package:mobile/widgets/shimmer.dart';
 
@@ -14,96 +14,193 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    _tabController = TabController(length: 5, vsync: this);
+    _scrollController = ScrollController()..addListener(() {});
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: BlocBuilder<NewsBloc, NewsState>(
-          bloc: context.read<NewsBloc>()..add(const NewsLoadEvent()),
+    return DefaultTabController(
+      length: 5,
+      child: BlocProvider<HomeBloc>(
+        create: (context) => HomeBloc()..add(const GetMoviesNews()),
+        child: BlocConsumer<HomeBloc, HomeState>(
+          listener: (context, state) {},
           builder: (context, state) {
-            if (state is NewsInitialState || state is NewsLoadingState) {
-              return Column(
-                children: [
-                  AppBar(
-                    title: Text(
-                      'Nerdy News',
-                      style: Theme.of(context).textTheme.titleLarge,
+            return Scaffold(
+              body: NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                  SliverAppBar(
+                    pinned: true,
+                    floating: true,
+                    title: const Text('The Cultural News'),
+                    bottom: TabBar(
+                      controller: _tabController,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      tabAlignment: TabAlignment.start,
+                      isScrollable: true,
+                      tabs: const <Widget>[
+                        Tab(text: 'Movies'),
+                        Tab(text: 'TV Series'),
+                        Tab(text: 'Games'),
+                        Tab(text: 'Anime'),
+                        Tab(text: 'Comics & Books'),
+                      ],
+                      onTap: (int index) {
+                        switch (index) {
+                          case 0:
+                            context.read<HomeBloc>().add(const GetMoviesNews());
+                          case 1:
+                            context.read<HomeBloc>().add(const GetTvNews());
+                          case 2:
+                            context.read<HomeBloc>().add(const GetGamingNews());
+                          case 3:
+                            context.read<HomeBloc>().add(const GetAnimeNews());
+                          case 4:
+                            context.read<HomeBloc>().add(const GetComicsNews());
+                        }
+                      },
                     ),
                   ),
-                  const NewsListShimmerWidget(),
                 ],
-              );
-            } else if (state is NewsErrorState) {
-              return MyErrorScreen(
-                onTap: () {
-                  context.read<NewsBloc>().add(const NewsLoadEvent());
-                },
-              );
-            } else if (state is NewsLoadedState) {
-              final newsList = state.newsList;
-
-              return NestedScrollView(
-                floatHeaderSlivers: true,
-                controller: context.read<NewsBloc>().newsScrollController,
-                headerSliverBuilder:
-                    (BuildContext context, bool innerBoxIsScrolled) {
-                  return [
-                    SliverAppBar(
-                      floating: true,
-                      title: Text(
-                        'Nerdy News',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ),
-                  ];
-                },
-                body: RefreshIndicator(
-                  onRefresh: () async {
-                    context.read<NewsBloc>().add(const NewsLoadEvent());
-                  },
-                  child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      final news = newsList[index];
-
-                      if (index % 5 == 0) {
-                        return Padding(
-                          padding: horizontalPadding16 + verticalPadding4,
-                          child: MediumNewsCard(news: news),
-                        );
-                      } else if (index % 13 == 0) {
-                        return Column(
-                          children: [
-                            Padding(
-                              padding: horizontalPadding16 + verticalPadding4,
-                              child: SmallNewsCard(news: news),
-                            ),
-                            HomePageNativeAds(
-                              key: Key(index.toString()),
-                            ),
-                          ],
-                        );
-                      } else {
-                        return Padding(
-                          padding: horizontalPadding16 + verticalPadding4,
-                          child: SmallNewsCard(news: news),
-                        );
-                      }
-                    },
-                    separatorBuilder: (context, index) => const Divider(
-                      endIndent: 16,
-                      indent: 16,
-                    ),
-                    itemCount: newsList.length,
-                  ),
+                body: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    movieNewsWidget(state),
+                    tvNewsWidget(state, _scrollController),
+                    gamingNewsWidget(state),
+                    animeNewsWidget(state),
+                    comicsNewsWidget(state),
+                  ],
                 ),
-              );
-            } else {
-              return Center(child: Text('We working on this $state'));
-            }
+              ),
+            );
           },
         ),
       ),
+    );
+  }
+
+  Widget tvNewsWidget(HomeState state, ScrollController controller) {
+    if (state.tvStatus == TVStatus.loading || state.tvNewsList == null) {
+      return const NewsListShimmerWidget();
+    } else if (state.tvStatus == TVStatus.success && state.tvNewsList != null) {
+      final newsList = state.tvNewsList;
+      return NewsList(newsList: newsList);
+    }
+
+    return emptyWidget;
+  }
+
+  Widget comicsNewsWidget(HomeState state) {
+    if (state.comicsStatus == ComicsStatus.loading ||
+        state.comicsNewsList == null) {
+      return const NewsListShimmerWidget();
+    } else if (state.comicsStatus == ComicsStatus.success &&
+        state.comicsNewsList != null) {
+      final newsList = state.comicsNewsList;
+      return NewsList(newsList: newsList);
+    }
+
+    return emptyWidget;
+  }
+
+  Widget gamingNewsWidget(HomeState state) {
+    if (state.gameStatus == GameStatus.loading || state.gameStatus == null) {
+      return const NewsListShimmerWidget();
+    } else if (state.gameStatus == GameStatus.success &&
+        state.gamesNewsList != null) {
+      final newsList = state.gamesNewsList;
+      return NewsList(newsList: newsList);
+    }
+
+    return emptyWidget;
+  }
+
+  Widget animeNewsWidget(HomeState state) {
+    if (state.animeStatus == AnimeStatus.loading ||
+        state.animeNewsList == null) {
+      return const NewsListShimmerWidget();
+    } else if (state.animeStatus == AnimeStatus.success &&
+        state.animeNewsList != null) {
+      final newsList = state.animeNewsList;
+      return NewsList(newsList: newsList);
+    }
+
+    return emptyWidget;
+  }
+
+  Widget movieNewsWidget(HomeState state) {
+    if (state.movieStatus == MovieStatus.loading ||
+        state.moviesNewsList == null) {
+      return const NewsListShimmerWidget();
+    } else if (state.movieStatus == MovieStatus.success &&
+        state.moviesNewsList != null) {
+      final newsList = state.moviesNewsList;
+      return NewsList(newsList: newsList);
+    }
+
+    return emptyWidget;
+  }
+}
+
+class NewsList extends StatelessWidget {
+  const NewsList({
+    required this.newsList,
+    this.scrollController,
+    super.key,
+  });
+
+  final List<NewsModel>? newsList;
+  final ScrollController? scrollController;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      padding: horizontalPadding16 + verticalPadding12,
+      controller: scrollController,
+      itemBuilder: (BuildContext context, int index) {
+        if (index % 7 == 0) {
+          return MediumNewsCard(news: newsList![index]);
+        }
+
+        if (index % 9 == 0) {
+          return Column(
+            children: [
+              SmallNewsCard(
+                news: newsList![index],
+              ),
+              HomePageNativeAds(
+                key: Key(index.toString()),
+              ),
+            ],
+          );
+        }
+
+        return SmallNewsCard(
+          news: newsList![index],
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return const Divider();
+      },
+      shrinkWrap: true,
+      itemCount: newsList!.length,
     );
   }
 }

@@ -27,30 +27,14 @@ class $AssetsEnvGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/anime.png
-  AssetGenImage get anime => const AssetGenImage('assets/images/anime.png');
-
   /// File path: assets/images/comics.jpeg
   AssetGenImage get comics => const AssetGenImage('assets/images/comics.jpeg');
-
-  /// File path: assets/images/game.jpg
-  AssetGenImage get game => const AssetGenImage('assets/images/game.jpg');
 
   /// File path: assets/images/icon.png
   AssetGenImage get icon => const AssetGenImage('assets/images/icon.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [anime, comics, game, icon];
-}
-
-class $AssetsLottieGen {
-  const $AssetsLottieGen();
-
-  /// File path: assets/lottie/error.lottie
-  String get error => 'assets/lottie/error.lottie';
-
-  /// List of all assets
-  List<String> get values => [error];
+  List<AssetGenImage> get values => [comics, icon];
 }
 
 class $AssetsSvgGen {
@@ -62,11 +46,17 @@ class $AssetsSvgGen {
   /// File path: assets/svg/logo.svg
   SvgGenImage get logo => const SvgGenImage('assets/svg/logo.svg');
 
+  /// File path: assets/svg/tcn-text.svg
+  SvgGenImage get tcnText => const SvgGenImage('assets/svg/tcn-text.svg');
+
+  /// File path: assets/svg/tcn.svg
+  SvgGenImage get tcn => const SvgGenImage('assets/svg/tcn.svg');
+
   /// File path: assets/svg/x-twitter.svg
   SvgGenImage get xTwitter => const SvgGenImage('assets/svg/x-twitter.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [icon, logo, xTwitter];
+  List<SvgGenImage> get values => [icon, logo, tcnText, tcn, xTwitter];
 }
 
 class Assets {
@@ -74,7 +64,6 @@ class Assets {
 
   static const $AssetsEnvGen env = $AssetsEnvGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
-  static const $AssetsLottieGen lottie = $AssetsLottieGen();
   static const $AssetsSvgGen svg = $AssetsSvgGen();
 }
 

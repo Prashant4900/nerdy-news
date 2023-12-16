@@ -37,6 +37,35 @@ class ImageShimmer extends StatelessWidget {
   }
 }
 
+class SearchListShimmerWidget extends StatelessWidget {
+  const SearchListShimmerWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: getShimmerColor(context).$1,
+      highlightColor: getShimmerColor(context).$2,
+      child: const Padding(
+        padding: allPadding16,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SmallSkeletonNewsCard(),
+            verticalMargin24,
+            SmallSkeletonNewsCard(),
+            verticalMargin24,
+            SmallSkeletonNewsCard(),
+            verticalMargin24,
+            SmallSkeletonNewsCard(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class NewsListShimmerWidget extends StatelessWidget {
   const NewsListShimmerWidget({
     super.key,

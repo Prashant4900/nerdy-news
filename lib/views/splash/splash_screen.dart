@@ -1,13 +1,11 @@
 import 'dart:async';
+import 'dart:developer';
 
-import 'package:analytics/analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/gen/assets.gen.dart';
-import 'package:mobile/gen/colors.gen.dart';
-import 'package:mobile/get_it.dart';
+import 'package:mobile/constants/commons.dart';
+import 'package:mobile/db/share_pref/app_pref.dart';
 import 'package:mobile/routes/routes.dart';
-import 'package:mobile/services/cache_helper.dart';
-import 'package:mobile/state/blocs/auth/auth_bloc.dart';
+import 'package:mobile/widgets/logo.dart';
 
 class MySplashScreen extends StatefulWidget {
   const MySplashScreen({super.key});
@@ -17,50 +15,43 @@ class MySplashScreen extends StatefulWidget {
 }
 
 class _MySplashScreenState extends State<MySplashScreen> {
-  late StreamSubscription<AuthState> subscription;
-
   @override
-  void initState() {
-    checkUserStatus();
-    super.initState();
-  }
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-  @override
-  void dispose() {
-    subscription.cancel();
-    super.dispose();
-  }
+    final isLoggedIn = AppPrefCache.getUserID();
+    final skipAuth = AppPrefCache.getAuthSkip();
 
-  Future<void> checkUserStatus() async {
-    await CacheHelper().setJoinedDate();
-    final auth = AuthBloc()..add(UserStatusEvent());
-    subscription = auth.stream.listen((state) {
-      if (state is AuthSuccess) {
-        appAnalytics
-          ..setUserID(state.userID ?? '')
-          ..log(LogEvent.appOpen);
-        Navigator.pushReplacementNamed(context, MyRoutes.dashboardScreen);
+    Timer(const Duration(seconds: 2), () {
+      log(
+        'Splash Screen:- isLoggedIn: ${isLoggedIn != ''}, skipAuth: $skipAuth',
+      );
+      if (isLoggedIn != '' || skipAuth) {
+        Navigator.pushReplacementNamed(
+          context,
+          MyRoutes.dashboardScreen,
+        );
       } else {
-        Navigator.pushReplacementNamed(context, MyRoutes.startScreen);
+        Navigator.pushReplacementNamed(
+          context,
+          MyRoutes.authScreen,
+        );
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: SizedBox(
         width: MediaQuery.sizeOf(context).width,
-        child: Column(
+        child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Assets.svg.logo.svg(
-              width: 150,
-              color: isDarkTheme ? MyColors.textDark : null,
-            ),
-            const SizedBox(
-              width: 80,
+            MyFullTextLogo(width: 300),
+            verticalMargin12,
+            SizedBox(
+              width: 200,
               child: LinearProgressIndicator(
                 minHeight: .7,
               ),

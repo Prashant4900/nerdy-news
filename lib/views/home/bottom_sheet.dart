@@ -1,11 +1,12 @@
 import 'package:akar_icons_flutter/akar_icons_flutter.dart';
-import 'package:analytics/analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/analytics/analytics.dart';
 import 'package:mobile/constants/commons.dart';
 import 'package:mobile/get_it.dart';
+import 'package:mobile/models/news_model.dart';
 import 'package:mobile/routes/routes.dart';
 import 'package:mobile/utils/utils.dart';
-import 'package:news/news.dart';
+// import 'package:news/news.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 

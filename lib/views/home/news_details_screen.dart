@@ -3,18 +3,15 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:html/parser.dart' as parser;
 import 'package:mobile/ads/banner_ads_widgets.dart';
 import 'package:mobile/constants/commons.dart';
-import 'package:mobile/state/blocs/favorite/favorite_bloc.dart';
-import 'package:mobile/state/cubits/reader_mode/reader_mode_provider.dart';
-import 'package:mobile/state/providers/favorite_state/favorite_state_provider.dart';
+import 'package:mobile/db/share_pref/app_pref.dart';
+import 'package:mobile/feature/favorite/bloc/favorite_bloc.dart';
+import 'package:mobile/models/news_model.dart';
 import 'package:mobile/utils/date_time.dart';
 import 'package:mobile/views/home/bottom_sheet.dart';
-import 'package:news/news.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class NewsDetailScreen extends StatefulWidget {
@@ -33,9 +30,8 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
   @override
   void initState() {
     super.initState();
+    _isReaderMode = AppPrefCache.getReaderMode();
     webViewInit();
-    _setReaderMode();
-    _isArticleSaved();
   }
 
   late WebViewController controller;
@@ -67,17 +63,6 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     await controller.loadRequest(
       Uri.parse(widget.news.source!),
     );
-  }
-
-  Future<void> _setReaderMode() async {
-    final provider = Provider.of<ReaderModeProvider>(context, listen: false);
-    _isReaderMode = await provider.readerMode;
-  }
-
-  Future<void> _isArticleSaved() async {
-    final provider = Provider.of<FavoriteStateProvider>(context, listen: false);
-    await provider.isBookmarked(widget.news);
-    _isSaved = await provider.isFavorite;
   }
 
   @override
@@ -230,48 +215,15 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
               verticalMargin8,
               Padding(
                 padding: horizontalPadding12,
-                child: Html(
-                  data: cleanHTML(widget.news.htmlBody!),
-                  shrinkWrap: true,
-                  doNotRenderTheseTags: const {
-                    'figcaption',
-                    'blockquote',
-                    'figure',
-                  },
-                  onAnchorTap: (url, attributes, element) => _launchUrl(url!),
-                  style: {
-                    'a': Style(
-                      textDecoration: TextDecoration.none,
-                    ),
-                    '*': Style(
-                      padding: HtmlPaddings.symmetric(vertical: 4),
-                      margin: Margins.zero,
-                    ),
-                    'img': Style(
-                      width: Width(
-                        MediaQuery.of(context).size.width / 1.08,
-                      ),
-                    ),
-                    'p': Style.fromTextStyle(
-                      Theme.of(context).textTheme.bodyMedium!,
-                    ).copyWith(
-                      textAlign: TextAlign.justify,
-                    ),
-                  },
+                child: Text(
+                  widget.news.htmlBody!,
+                  textAlign: TextAlign.justify,
                 ),
               ),
             ],
           ),
         ),
       );
-}
-
-Future<void> _launchUrl(String url) async {
-  final url0 = Uri.parse(url);
-
-  if (!await launchUrl(url0)) {
-    throw Exception('Could not launch $url0');
-  }
 }
 
 String cleanHTML(String htmlBody) {
@@ -286,6 +238,6 @@ String cleanHTML(String htmlBody) {
     pictureTag.remove();
   }
 
-  final modifiedHtmlString = document.outerHtml;
+  final modifiedHtmlString = document.outerHtml.replaceAll('\n\n', '\n');
   return modifiedHtmlString;
 }

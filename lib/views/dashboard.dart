@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/views/favorite/bookmark_page.dart';
 import 'package:mobile/views/home/home_page.dart';
 import 'package:mobile/views/profile/profile_page.dart';
+import 'package:mobile/views/search/search_screen.dart';
 
 class MyDashboard extends StatefulWidget {
   const MyDashboard({super.key});
@@ -24,7 +25,7 @@ class _MyDashboardState extends State<MyDashboard> {
               index: index,
               children: const [
                 MyHomePage(),
-                // MyWeeklyPage(),
+                MySearchScreen(),
                 MyBookmarkPage(),
                 MyProfilePage(),
               ],
@@ -50,23 +51,12 @@ class _MyDashboardState extends State<MyDashboard> {
                     : Colors.grey,
               ),
             ),
-            // IconButton(
-            //   onPressed: () {
-            //     setState(() => index = 1);
-            //   },
-            //   icon: Icon(
-            //     AkarIcons.globe,
-            //     color: index == 1
-            //         ? Theme.of(context).colorScheme.onSurface
-            //         : Colors.grey,
-            //   ),
-            // ),
             IconButton(
               onPressed: () {
                 setState(() => index = 1);
               },
               icon: Icon(
-                Icons.bookmark,
+                AkarIcons.search,
                 color: index == 1
                     ? Theme.of(context).colorScheme.onSurface
                     : Colors.grey,
@@ -77,8 +67,19 @@ class _MyDashboardState extends State<MyDashboard> {
                 setState(() => index = 2);
               },
               icon: Icon(
-                AkarIcons.person,
+                Icons.bookmark,
                 color: index == 2
+                    ? Theme.of(context).colorScheme.onSurface
+                    : Colors.grey,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                setState(() => index = 3);
+              },
+              icon: Icon(
+                AkarIcons.person,
+                color: index == 3
                     ? Theme.of(context).colorScheme.onSurface
                     : Colors.grey,
               ),
