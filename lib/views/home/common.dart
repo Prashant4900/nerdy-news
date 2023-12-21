@@ -17,7 +17,7 @@ class NewsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      padding: horizontalPadding16 + verticalPadding12,
+      padding: horizontalPadding16 + verticalPadding4,
       controller: controller,
       itemBuilder: (BuildContext context, int index) {
         if (index % 7 == 0) {

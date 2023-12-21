@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/db/share_pref/app_pref.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode _themeMode = AppPrefCache.getThemeMode();
 
   ThemeMode get themeMode => _themeMode;
 

@@ -17,11 +17,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<GetComicsNews>(_getComicsNews);
     on<GetGamingNews>(_getGamingNews);
     on<GetTvNews>(_getTVNews);
+    on<GetAllNews>(_getAllNews);
   }
 
   final client = getIt<SupabaseConfig>().client;
   final news = getIt<NewsRepository>();
-  int newsPage = 0;
+  int _newsPage = 0;
   int _animeNewsPage = 0;
   int _movieNewsPage = 0;
   int _tvNewsPage = 0;
@@ -239,6 +240,45 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(
         state.copyWith(
           comicsStatus: ComicsStatus.failure,
+          message: message,
+        ),
+      );
+    }
+  }
+
+  FutureOr<void> _getAllNews(GetAllNews event, Emitter<HomeState> emit) async {
+    if (!event.loadMore) {
+      emit(state.copyWith(allNewsStatus: AllNewsStatus.loading));
+    }
+    try {
+      if (event.loadMore) {
+        _newsPage += 10;
+        final result = await news.getAllNews(
+          client: client,
+          page: _newsPage + 1,
+        );
+        emit(
+          state.copyWith(
+            allNewsStatus: AllNewsStatus.success,
+            allNewsList: [...state.allNewsList!, ...result!],
+          ),
+        );
+      } else {
+        final result = await news.getAllNews(
+          client: client,
+        );
+        emit(
+          state.copyWith(
+            allNewsStatus: AllNewsStatus.success,
+            allNewsList: result,
+          ),
+        );
+      }
+    } catch (e) {
+      final message = e.toString();
+      emit(
+        state.copyWith(
+          allNewsStatus: AllNewsStatus.failure,
           message: message,
         ),
       );

@@ -26,6 +26,26 @@ class NewsRepository {
     }
   }
 
+  Future<List<NewsModel>?> getAllNews({
+    required SupabaseClient client,
+    int page = 0,
+  }) async {
+    try {
+      final result = await client
+          .from('news')
+          .select<List<Map<String, dynamic>>>(
+            '*,publisher_id(*),news_categories!inner(*)',
+          )
+          .range(page, page + 10)
+          .order('published_at', ascending: false)
+          .onError((error, stackTrace) => throw Exception(error));
+
+      return result.map(NewsModel.fromMap).toList();
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<List<NewsModel>?> getNewsByPublisher({
     required SupabaseClient client,
     required int publisherID,

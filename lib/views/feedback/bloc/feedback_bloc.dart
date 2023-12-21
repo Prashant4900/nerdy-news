@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mobile/feature/feedback/model/feedback_model.dart';
-import 'package:mobile/feature/feedback/repository/feedback_repository.dart';
 import 'package:mobile/get_it.dart';
+import 'package:mobile/models/feedback_model.dart';
+import 'package:mobile/repositories/feedback_repository.dart';
 import 'package:mobile/utils/supabase_config.dart';
 
 part 'feedback_event.dart';

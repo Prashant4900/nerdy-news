@@ -18,6 +18,17 @@ class GetAnimeNews extends HomeEvent {
   List<Object> get props => [super.props, loadMore];
 }
 
+class GetAllNews extends HomeEvent {
+  const GetAllNews({
+    this.loadMore = false,
+  });
+
+  final bool loadMore;
+
+  @override
+  List<Object> get props => [super.props, loadMore];
+}
+
 class GetMoviesNews extends HomeEvent {
   const GetMoviesNews({
     this.loadMore = false,

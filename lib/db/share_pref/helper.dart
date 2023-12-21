@@ -73,35 +73,34 @@ class AppPrefCache {
   }
 
   static Future<ThemeMode> setThemeMode({required ThemeMode mode}) async {
-    String _mode = '';
+    var modeValue = 0;
     if (mode == ThemeMode.system) {
-      _mode = 'system';
+      modeValue = 0;
     }
 
     if (mode == ThemeMode.light) {
-      _mode = 'light';
+      modeValue = 1;
     }
 
     if (mode == ThemeMode.dark) {
-      _mode = 'dark';
+      modeValue = -1;
     }
 
-    await AppPref.save(AppPrefKey.themeMode, _mode);
-    log('Set Theme Mode isSaved: $mode');
+    final flag = await AppPref.save(AppPrefKey.themeMode, modeValue);
+    log('Set Theme Mode isSaved: $mode $modeValue $flag');
     return mode;
   }
 
   static ThemeMode getThemeMode() {
-    final mode = AppPref.get(AppPrefKey.themeMode, false) as String;
-
-    log('Get Theme Mode: $mode');
+    final mode = AppPref.get(AppPrefKey.themeMode, 0) as int;
+    log('Theme State: $mode');
 
     switch (mode) {
-      case 'system':
+      case 0:
         return ThemeMode.system;
-      case 'light':
+      case 1:
         return ThemeMode.light;
-      case 'dark':
+      case -1:
         return ThemeMode.dark;
       default:
         return ThemeMode.system;

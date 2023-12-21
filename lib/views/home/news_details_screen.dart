@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
@@ -7,11 +5,9 @@ import 'package:html/parser.dart' as parser;
 import 'package:mobile/ads/banner_ads_widgets.dart';
 import 'package:mobile/constants/commons.dart';
 import 'package:mobile/db/share_pref/app_pref.dart';
-import 'package:mobile/feature/favorite/bloc/favorite_bloc.dart';
 import 'package:mobile/models/news_model.dart';
 import 'package:mobile/utils/date_time.dart';
 import 'package:mobile/views/home/bottom_sheet.dart';
-import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class NewsDetailScreen extends StatefulWidget {
@@ -24,7 +20,7 @@ class NewsDetailScreen extends StatefulWidget {
 }
 
 class _NewsDetailScreenState extends State<NewsDetailScreen> {
-  bool _isSaved = false;
+  final bool _isSaved = false;
   bool _isReaderMode = false;
 
   @override
@@ -89,23 +85,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
         ),
         actions: [
           InkWell(
-            onTap: () {
-              try {
-                if (_isSaved) {
-                  context.read<FavoriteBloc>().add(
-                        DeleteFavoriteEvent(news: widget.news),
-                      );
-                  setState(() => _isSaved = false);
-                } else {
-                  context.read<FavoriteBloc>().add(
-                        AddTOFavoriteEvent(news: widget.news),
-                      );
-                  setState(() => _isSaved = true);
-                }
-              } catch (e) {
-                log(e.toString());
-              }
-            },
+            onTap: () {},
             child: _isSaved
                 ? const Icon(Icons.bookmark)
                 : const Icon(Icons.bookmark_border),

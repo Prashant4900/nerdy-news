@@ -10,6 +10,8 @@ enum GameStatus { initial, loading, success, failure }
 
 enum ComicsStatus { initial, loading, success, failure }
 
+enum AllNewsStatus { initial, loading, success, failure }
+
 class HomeState extends Equatable {
   const HomeState({
     this.movieStatus,
@@ -17,11 +19,13 @@ class HomeState extends Equatable {
     this.gameStatus,
     this.tvStatus,
     this.comicsStatus,
+    this.allNewsStatus,
     this.animeNewsList,
     this.gamesNewsList,
     this.moviesNewsList,
     this.tvNewsList,
     this.comicsNewsList,
+    this.allNewsList,
     this.message,
   });
 
@@ -30,8 +34,10 @@ class HomeState extends Equatable {
   final GameStatus? gameStatus;
   final TVStatus? tvStatus;
   final ComicsStatus? comicsStatus;
+  final AllNewsStatus? allNewsStatus;
   final String? message;
   final List<NewsModel>? animeNewsList;
+  final List<NewsModel>? allNewsList;
   final List<NewsModel>? gamesNewsList;
   final List<NewsModel>? tvNewsList;
   final List<NewsModel>? moviesNewsList;
@@ -43,12 +49,14 @@ class HomeState extends Equatable {
         gameStatus: GameStatus.initial,
         tvStatus: TVStatus.initial,
         comicsStatus: ComicsStatus.initial,
+        allNewsStatus: AllNewsStatus.initial,
       );
 
   HomeState copyWith({
     MovieStatus? movieStatus,
     AnimeStatus? animeStatus,
     GameStatus? gameStatus,
+    AllNewsStatus? allNewsStatus,
     TVStatus? tvStatus,
     ComicsStatus? comicsStatus,
     List<NewsModel>? animeNewsList,
@@ -56,15 +64,18 @@ class HomeState extends Equatable {
     List<NewsModel>? tvNewsList,
     List<NewsModel>? moviesNewsList,
     List<NewsModel>? comicsNewsList,
+    List<NewsModel>? allNewsList,
     String? message,
   }) {
     return HomeState(
       movieStatus: movieStatus ?? this.movieStatus,
       animeStatus: animeStatus ?? this.animeStatus,
       gameStatus: gameStatus ?? this.gameStatus,
+      allNewsStatus: allNewsStatus ?? this.allNewsStatus,
       tvStatus: tvStatus ?? this.tvStatus,
       comicsStatus: comicsStatus ?? this.comicsStatus,
       animeNewsList: animeNewsList ?? this.animeNewsList,
+      allNewsList: allNewsList ?? this.allNewsList,
       gamesNewsList: gamesNewsList ?? this.gamesNewsList,
       comicsNewsList: comicsNewsList ?? this.comicsNewsList,
       tvNewsList: tvNewsList ?? this.tvNewsList,
@@ -84,6 +95,8 @@ class HomeState extends Equatable {
         gamesNewsList,
         moviesNewsList,
         comicsNewsList,
+        allNewsStatus,
+        allNewsList,
         tvNewsList,
         message,
       ];

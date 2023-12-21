@@ -46,35 +46,44 @@ class SmallNewsCard extends StatelessWidget {
                     horizontalMargin8,
                     Text(
                       news.publisherModel!.name!,
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontSize: 10,
+                          ),
                     ),
                   ],
                 ),
-                verticalMargin12,
+                verticalMargin8,
                 Text(
                   news.title!,
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
+                      .copyWith(fontWeight: FontWeight.bold, fontSize: 12),
                   maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 verticalMargin8,
                 Row(
                   children: [
                     Text(
                       timeToRead(news.htmlBody!),
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontSize: 10,
+                          ),
                     ),
                     horizontalMargin4,
                     Text(
                       '•',
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontSize: 10,
+                          ),
                     ),
                     horizontalMargin4,
                     Text(
                       getTimeAgo(news.publishedAt!),
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontSize: 10,
+                          ),
                     ),
                   ],
                 ),
@@ -86,8 +95,8 @@ class SmallNewsCard extends StatelessWidget {
             imageUrl: news.thumbnail!,
             imageBuilder: (context, imageProvider) {
               return Container(
-                width: 85,
-                height: 80,
+                width: 80,
+                height: 70,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   image: DecorationImage(
@@ -155,8 +164,8 @@ class _MediumNewsCardState extends State<MediumNewsCard> {
           Row(
             children: [
               Container(
-                width: 14,
-                height: 14,
+                width: 12,
+                height: 12,
                 padding: allPadding2,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -167,33 +176,43 @@ class _MediumNewsCardState extends State<MediumNewsCard> {
               horizontalMargin8,
               Text(
                 widget.news.publisherModel!.name!,
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      fontSize: 10,
+                    ),
               ),
               horizontalMargin4,
               Text(
                 '•',
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      fontSize: 10,
+                    ),
               ),
               horizontalMargin4,
               Text(
                 getTimeAgo(widget.news.publishedAt!),
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      fontSize: 10,
+                    ),
               ),
             ],
           ),
-          verticalMargin12,
+          verticalMargin8,
           Text(
             widget.news.title!,
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
           ),
           if (_isImageLoadFailed) ...[
             verticalMargin8,
             Text(
               widget.news.description!,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontSize: 12,
+                  ),
             ),
           ],
           verticalMargin4,

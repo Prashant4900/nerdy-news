@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/constants/commons.dart';
-import 'package:mobile/feature/feedback/bloc/feedback_bloc.dart';
-import 'package:mobile/feature/feedback/model/feedback_model.dart';
+import 'package:mobile/models/feedback_model.dart';
 import 'package:mobile/versions.dart';
+import 'package:mobile/views/feedback/bloc/feedback_bloc.dart';
 import 'package:mobile/widgets/buttons.dart';
 
 class MyFeedbackScreen extends StatefulWidget {

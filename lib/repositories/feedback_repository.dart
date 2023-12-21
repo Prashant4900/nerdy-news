@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:image_picker/image_picker.dart';
-import 'package:mobile/feature/feedback/model/feedback_model.dart';
+import 'package:mobile/models/feedback_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// {@template feedback}

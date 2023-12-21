@@ -6,7 +6,6 @@ apk:
 .PHONY: get
 get:
 	flutter pub get
-	flutter pub get --directory ./packages/analytics
 
 .PHONY: clean
 clean:
