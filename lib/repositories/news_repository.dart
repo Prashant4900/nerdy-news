@@ -78,8 +78,8 @@ class NewsRepository {
           .select<List<Map<String, dynamic>>>(
             '*,publisher_id(*),news_categories!inner(*)',
           )
-          .ilike('title', '%$query%')
-          .range(page, page + 30)
+          .ilike('html_body', '%$query%')
+          .range(page, page + 50)
           .order('published_at', ascending: false)
           .onError((error, stackTrace) => throw Exception(error));
       return result.map(NewsModel.fromMap).toList();

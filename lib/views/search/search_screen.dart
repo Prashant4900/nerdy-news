@@ -90,38 +90,35 @@ class _MySearchScreenState extends State<MySearchScreen> {
       },
       builder: (context, state) {
         return Scaffold(
+          appBar: AppBar(
+            title: Container(
+              width: MediaQuery.sizeOf(context).width * .9,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Theme.of(context).colorScheme.primary.withOpacity(.2),
+              ),
+              child: TextField(
+                controller: _searchController,
+                decoration: const InputDecoration(
+                  hintText: 'Search',
+                  border: InputBorder.none,
+                  prefixIcon: Icon(CupertinoIcons.search, size: 20),
+                ),
+                onChanged: (String text) {
+                  context
+                      .read<SearchBloc>()
+                      .add(GetNewsByQueryEvent(query: text));
+                  // _searchController.clear();
+                },
+              ),
+            ),
+          ),
           body: SafeArea(
             child: SingleChildScrollView(
               padding: horizontalPadding16,
               child: Column(
                 children: [
-                  Padding(
-                    padding: verticalPadding12,
-                    child: Container(
-                      width: MediaQuery.sizeOf(context).width * .9,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withOpacity(.2),
-                      ),
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: const InputDecoration(
-                          hintText: 'Search',
-                          border: InputBorder.none,
-                          prefixIcon: Icon(CupertinoIcons.search, size: 20),
-                        ),
-                        onSubmitted: (String text) {
-                          context
-                              .read<SearchBloc>()
-                              .add(GetNewsByQueryEvent(query: text));
-                          _searchController.clear();
-                        },
-                      ),
-                    ),
-                  ),
+                  verticalMargin12,
                   _PublisherWidget(state: state),
                   verticalMargin12,
                   if (_newsList.isNotEmpty ||

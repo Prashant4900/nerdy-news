@@ -52,6 +52,12 @@ class _MyProfilePageState extends State<MyProfilePage> {
       builder: (context, state) {
         return SafeArea(
           child: Scaffold(
+            appBar: AppBar(
+              title: Text(
+                'Profile',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
             body: bodyWidget(context, state),
           ),
         );
@@ -66,16 +72,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 45,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Profile',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-            ),
             verticalMargin24,
             Row(
               children: [

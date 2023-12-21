@@ -11,34 +11,27 @@ class MyBookmarkPage extends StatelessWidget {
       child: RefreshIndicator(
         onRefresh: () async {},
         child: Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: horizontalPadding16,
-                  child: SizedBox(
-                    height: 45,
-                    child: Align(
-                      child: Text(
-                        'Saved Articles',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ),
-                  ),
-                ),
-                const Divider(),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .8,
-                  child: const Center(
-                    child: EmptyArticleCard(
-                      label: 'Saved Articles',
-                      description:
-                          '''Saved articles are stored here. Tap to icon on any article to add it to your collection.''',
-                    ),
-                  ),
-                ),
-              ],
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              'Saved Articles',
+              style: Theme.of(context).textTheme.titleLarge,
             ),
+          ),
+          body: Column(
+            children: [
+              const Divider(),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * .8,
+                child: const Center(
+                  child: EmptyArticleCard(
+                    label: 'Saved Articles',
+                    description:
+                        '''Saved articles are stored here. Tap to icon on any article to add it to your collection.''',
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

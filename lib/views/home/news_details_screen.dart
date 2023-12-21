@@ -86,10 +86,14 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
         actions: [
           InkWell(
             onTap: () {},
-            child: _isSaved
-                ? const Icon(Icons.bookmark)
-                : const Icon(Icons.bookmark_border),
+            child: const Icon(CupertinoIcons.wand_stars),
           ),
+          // InkWell(
+          //   onTap: () {},
+          //   child: _isSaved
+          //       ? const Icon(Icons.bookmark)
+          //       : const Icon(Icons.bookmark_border),
+          // ),
           IconButton(
             onPressed: () {
               newsButtonSheet(context, widget.news);
@@ -166,7 +170,10 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 padding: horizontalPadding12,
                 child: Text(
                   widget.news.title!,
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                 ),
               ),
               verticalMargin12,
@@ -182,12 +189,16 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                     horizontalMargin12,
                     Text(
                       widget.news.publisherModel!.name!,
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontSize: 10,
+                          ),
                     ),
                     const Spacer(),
                     Text(
                       formatDate(widget.news.publishedAt!),
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontSize: 10,
+                          ),
                     ),
                   ],
                 ),
@@ -197,6 +208,9 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 padding: horizontalPadding12,
                 child: Text(
                   widget.news.htmlBody!,
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        fontSize: 14,
+                      ),
                   textAlign: TextAlign.justify,
                 ),
               ),
