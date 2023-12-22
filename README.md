@@ -1,6 +1,6 @@
-# Nerdy News
+# The Cultural News
 
-Nerdy News is a News App where News is collected from the top Comics and Superhero update sites. Get updated on every scroll in an easy and fantastic way. We cover Hollywood Movies, TV Shows, Comics, Games and Anime from Popular pop culture.
+The Cultural News is the ultimate News App for comic book and superhero enthusiasts. Our app curates the latest updates from the top Comics and Superhero news sources, ensuring you stay informed in a fun and convenient way. We cover a wide spectrum of entertainment, including Movies, TV Shows, Comics, Anime, Manga, and Popular Pop Culture.
 
 ## Getting Started
 
@@ -15,4 +15,3 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-keytool -genkey -v -keystore ~/Volumes/Work/projects/news/nerdy-news/mobile/android/app/upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
