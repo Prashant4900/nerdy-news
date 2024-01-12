@@ -43,6 +43,7 @@ class HomeState extends Equatable {
   final List<NewsModel>? moviesNewsList;
   final List<NewsModel>? comicsNewsList;
 
+  // ignore: prefer_constructors_over_static_methods
   static HomeState initial() => const HomeState(
         movieStatus: MovieStatus.initial,
         animeStatus: AnimeStatus.initial,

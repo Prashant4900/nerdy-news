@@ -43,20 +43,25 @@ class _MySplashScreenState extends State<MySplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-        width: MediaQuery.sizeOf(context).width,
-        child: const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            MyFullTextLogo(width: 300),
-            verticalMargin12,
-            SizedBox(
-              width: 200,
-              child: LinearProgressIndicator(
-                minHeight: .7,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
+      body: SafeArea(
+        child: SizedBox(
+          width: MediaQuery.sizeOf(context).width,
+          child: const Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MyFullTextLogo(width: 300),
+              verticalMargin12,
+              SizedBox(
+                width: 200,
+                child: LinearProgressIndicator(
+                  minHeight: .7,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

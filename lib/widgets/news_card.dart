@@ -1,18 +1,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/constants/commons.dart';
 import 'package:mobile/models/news_model.dart';
 import 'package:mobile/routes/routes.dart';
 import 'package:mobile/utils/date_time.dart';
 import 'package:mobile/utils/time_to_read.dart';
-import 'package:mobile/views/home/bottom_sheet.dart';
+import 'package:mobile/views/favorite/bloc/favorite_bloc.dart';
+import 'package:mobile/views/home/bloc/summary/summary_bloc.dart';
+import 'package:mobile/widgets/bottom_sheet.dart';
 
 void _moveToNewsDetail(BuildContext context, NewsModel news) {
   Navigator.pushNamed(
     context,
     MyRoutes.newsDetailScreen,
     arguments: NewsDetailArguments(newsModel: news),
-  );
+  ).then((value) {
+    context.read<FavoriteBloc>().add(IsFavorite(news: news));
+    context.read<SummaryBloc>().add(ResetState());
+  });
 }
 
 class SmallNewsCard extends StatelessWidget {

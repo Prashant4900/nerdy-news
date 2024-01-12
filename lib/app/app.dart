@@ -5,7 +5,9 @@ import 'package:mobile/providers/reader_mode_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/routes/routes.dart';
 import 'package:mobile/views/auth/bloc/auth_bloc.dart';
+import 'package:mobile/views/favorite/bloc/favorite_bloc.dart';
 import 'package:mobile/views/feedback/bloc/feedback_bloc.dart';
+import 'package:mobile/views/home/bloc/summary/summary_bloc.dart';
 import 'package:mobile/views/search/bloc/search_bloc.dart';
 import 'package:mobile/views/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +35,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<FeedbackBloc>(
           create: (context) => FeedbackBloc(),
+        ),
+        BlocProvider<SummaryBloc>(
+          create: (context) => SummaryBloc(),
+        ),
+        BlocProvider<FavoriteBloc>(
+          create: (context) => FavoriteBloc()..add(GetAllFavorite()),
         ),
       ],
       child: Consumer<ThemeProvider>(

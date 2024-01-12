@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/constants/commons.dart';
-import 'package:mobile/views/home/bloc/home_bloc.dart';
-import 'package:mobile/views/home/common.dart';
+import 'package:mobile/views/home/bloc/home/home_bloc.dart';
+import 'package:mobile/widgets/common.dart';
 import 'package:mobile/widgets/shimmer.dart';
 
 class TVPage extends StatefulWidget {

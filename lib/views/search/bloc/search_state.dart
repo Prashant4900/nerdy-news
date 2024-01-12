@@ -19,6 +19,7 @@ class SearchState extends Equatable {
   final List<NewsModel>? searchResult;
   final bool isQueryExecuted;
 
+  // ignore: prefer_constructors_over_static_methods
   static SearchState initial() => const SearchState(
         status: SearchStatus.initial,
       );

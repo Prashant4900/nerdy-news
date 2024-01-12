@@ -20,23 +20,19 @@ class PublisherWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        Assets.svg.tcnText.svg(
+          height: 10,
+          colorFilter: ColorFilter.mode(
+            Theme.of(context).colorScheme.onBackground.withOpacity(.85),
+            BlendMode.srcIn,
+          ),
+        ),
+        const Spacer(),
         Text(
           timeToRead(news.htmlBody!),
           style: Theme.of(context).textTheme.bodySmall,
         ),
-        const Spacer(),
-        Assets.svg.icon.svg(
-          height: 12,
-          color: Theme.of(context).colorScheme.onBackground,
-        ),
-        horizontalMargin4,
-        Text(
-          'Nerdy News',
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall!
-              .copyWith(fontWeight: FontWeight.bold),
-        ),
+        horizontalMargin12,
       ],
     );
   }
@@ -209,6 +205,8 @@ class ThirdNewsCard extends StatelessWidget {
             shrinkWrap: true,
             children: [
               ImageWidget(news: news),
+              verticalMargin8,
+              NewsMetaDataWidget(news: news),
               verticalMargin4,
               Text(
                 news.title!,
@@ -217,8 +215,6 @@ class ThirdNewsCard extends StatelessWidget {
                     ),
               ),
               verticalMargin8,
-              NewsMetaDataWidget(news: news),
-              verticalMargin4,
               PublisherWidget(news: news),
             ],
           ),
@@ -253,7 +249,7 @@ class FourthNewsCard extends StatelessWidget {
               ),
               verticalMargin4,
               NewsMetaDataWidget(news: news),
-              verticalMargin4,
+              verticalMargin8,
               PublisherWidget(news: news),
             ],
           ),

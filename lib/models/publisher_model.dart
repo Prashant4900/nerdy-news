@@ -1,5 +1,10 @@
 import 'dart:convert';
 
+import 'package:isar/isar.dart';
+
+part 'publisher_model.g.dart';
+
+@embedded
 class PublisherModel {
   PublisherModel({
     this.id,

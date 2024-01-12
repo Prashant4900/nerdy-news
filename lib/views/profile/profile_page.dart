@@ -50,16 +50,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
         }
       },
       builder: (context, state) {
-        return SafeArea(
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text(
-                'Profile',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              'Profile',
+              style: Theme.of(context).textTheme.titleLarge,
             ),
-            body: bodyWidget(context, state),
           ),
+          body: SafeArea(child: bodyWidget(context, state)),
         );
       },
     );
@@ -155,47 +153,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                 .copyWith(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        // BlocBuilder<ThemeCubit, ThemeState>(
-                        //   builder: (context, state) {
-                        //     return Column(
-                        //       children: [
-                        //         ListTile(
-                        //           title: const Text('System'),
-                        //           trailing: state.themeMode == ThemeMode.system
-                        //               ? const Icon(AkarIcons.check)
-                        //               : emptyWidget,
-                        //           onTap: () {
-                        //             context
-                        //                 .read<ThemeCubit>()
-                        //                 .changeTheme(ThemeMode.system);
-                        //           },
-                        //         ),
-                        //         ListTile(
-                        //           title: const Text('Light'),
-                        //           trailing: state.themeMode == ThemeMode.light
-                        //               ? const Icon(AkarIcons.check)
-                        //               : emptyWidget,
-                        //           onTap: () {
-                        //             context
-                        //                 .read<ThemeCubit>()
-                        //                 .changeTheme(ThemeMode.light);
-                        //           },
-                        //         ),
-                        //         ListTile(
-                        //           title: const Text('Dark'),
-                        //           trailing: state.themeMode == ThemeMode.dark
-                        //               ? const Icon(AkarIcons.check)
-                        //               : emptyWidget,
-                        //           onTap: () {
-                        //             context
-                        //                 .read<ThemeCubit>()
-                        //                 .changeTheme(ThemeMode.dark);
-                        //           },
-                        //         ),
-                        //       ],
-                        //     );
-                        //   },
-                        // ),
                         Consumer<ThemeProvider>(
                           builder: (context, themeProvider, child) {
                             return Column(

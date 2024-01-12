@@ -1,13 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:html/parser.dart' as parser;
 import 'package:mobile/ads/banner_ads_widgets.dart';
 import 'package:mobile/constants/commons.dart';
 import 'package:mobile/db/share_pref/app_pref.dart';
 import 'package:mobile/models/news_model.dart';
 import 'package:mobile/utils/date_time.dart';
-import 'package:mobile/views/home/bottom_sheet.dart';
+import 'package:mobile/views/home/bloc/summary/summary_bloc.dart';
+import 'package:mobile/widgets/bottom_sheet.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class NewsDetailScreen extends StatefulWidget {
@@ -20,7 +22,6 @@ class NewsDetailScreen extends StatefulWidget {
 }
 
 class _NewsDetailScreenState extends State<NewsDetailScreen> {
-  final bool _isSaved = false;
   bool _isReaderMode = false;
 
   @override
@@ -84,16 +85,17 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
           ],
         ),
         actions: [
-          InkWell(
-            onTap: () {},
-            child: const Icon(CupertinoIcons.wand_stars),
-          ),
-          // InkWell(
-          //   onTap: () {},
-          //   child: _isSaved
-          //       ? const Icon(Icons.bookmark)
-          //       : const Icon(Icons.bookmark_border),
-          // ),
+          if (_isReaderMode)
+            InkWell(
+              onTap: () {
+                context
+                    .read<SummaryBloc>()
+                    .add(GetNewsSummary(news: widget.news));
+              },
+              child: const Icon(CupertinoIcons.wand_stars),
+            )
+          else
+            emptyWidget,
           IconButton(
             onPressed: () {
               newsButtonSheet(context, widget.news);
@@ -112,9 +114,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
             )
           else
             const SizedBox.shrink(),
-          Expanded(
-            child: _isReaderMode ? _renderReaderView() : _renderWebView(),
-          ),
+          if (_isReaderMode) _renderReaderView() else _renderWebView(),
           BannerAdWidget(key: Key(widget.key.toString())),
         ],
       ),
@@ -137,15 +137,18 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     );
   }
 
-  Widget _renderWebView() => WebViewWidget(
-        controller: controller,
+  Widget _renderWebView() => Expanded(
+        child: WebViewWidget(
+          controller: controller,
+        ),
       );
 
-  Widget _renderReaderView() => GestureDetector(
+  Widget _renderReaderView() => Expanded(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const NewsSummaryWidget(),
               CachedNetworkImage(
                 imageUrl: widget.news.thumbnail!,
                 imageBuilder: (context, imageProvider) {
@@ -218,6 +221,80 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
           ),
         ),
       );
+}
+
+class NewsSummaryWidget extends StatefulWidget {
+  const NewsSummaryWidget({
+    super.key,
+  });
+
+  @override
+  State<NewsSummaryWidget> createState() => _NewsSummaryWidgetState();
+}
+
+class _NewsSummaryWidgetState extends State<NewsSummaryWidget> {
+  bool _isEnglish = true;
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SummaryBloc, SummaryState>(
+      builder: (context, state) {
+        if (state.status == SummaryStatus.loading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state.status == SummaryStatus.success) {
+          final news = _isEnglish
+              ? state.summaryModel!.english
+              : state.summaryModel!.hinglish;
+          return Container(
+            padding: horizontalPadding16 + verticalPadding12,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _isEnglish = !_isEnglish;
+                      });
+                    },
+                    child: Text(_isEnglish ? 'Hindi' : 'English'),
+                  ),
+                  Text(
+                    news!.title!,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                  ),
+                  verticalMargin4,
+                  Text(
+                    news.description!,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontSize: 12,
+                        ),
+                    textAlign: TextAlign.justify,
+                  ),
+                  verticalMargin12,
+                  Text(
+                    news.summarize!,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontSize: 14,
+                        ),
+                    textAlign: TextAlign.justify,
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else {
+          return emptyWidget;
+        }
+      },
+    );
+  }
 }
 
 String cleanHTML(String htmlBody) {

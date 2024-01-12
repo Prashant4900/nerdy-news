@@ -1,7 +1,11 @@
 import 'dart:convert';
 
+import 'package:isar/isar.dart';
 import 'package:mobile/models/publisher_model.dart';
 
+part 'news_model.g.dart';
+
+@embedded
 class NewsModel {
   NewsModel({
     this.id,

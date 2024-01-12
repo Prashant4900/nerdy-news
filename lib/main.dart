@@ -25,7 +25,8 @@ Future<void> main() async {
 
       // Load Environments Variables
       await Env.load(
-        source: EnvLoader.asset('assets/env/.env'),
+        source: EnvLoader.asset('assets/env/.pro.env'),
+        // source: EnvLoader.asset('assets/env/.env'),
         password: 'NerdyNews490',
       );
 
