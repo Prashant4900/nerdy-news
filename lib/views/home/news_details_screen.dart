@@ -122,7 +122,20 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
         padding: bottomPadding48,
         child: FloatingActionButton(
           backgroundColor: Theme.of(context).colorScheme.background,
-          onPressed: () => setState(() => _isReaderMode = !_isReaderMode),
+          onPressed: () {
+            showModalBottomSheet<dynamic>(
+              context: context,
+              builder: (BuildContext context) {
+                return ListView(
+                  children: [
+                    verticalMargin16,
+                    Text(widget.news.title!),
+                  ],
+                );
+              },
+            );
+            // setState(() => _isReaderMode = !_isReaderMode);
+          },
           child: _isReaderMode
               ? Icon(
                   CupertinoIcons.book_fill,

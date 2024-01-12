@@ -64,8 +64,8 @@ class SmallNewsCard extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium!
-                      .copyWith(fontWeight: FontWeight.bold, fontSize: 12),
-                  maxLines: 2,
+                      .copyWith(fontWeight: FontWeight.bold, fontSize: 14),
+                  maxLines: 4,
                   overflow: TextOverflow.ellipsis,
                 ),
                 verticalMargin8,
@@ -101,8 +101,8 @@ class SmallNewsCard extends StatelessWidget {
             imageUrl: news.thumbnail!,
             imageBuilder: (context, imageProvider) {
               return Container(
-                width: 80,
-                height: 70,
+                width: 90,
+                height: 80,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   image: DecorationImage(
@@ -207,7 +207,7 @@ class _MediumNewsCardState extends State<MediumNewsCard> {
             widget.news.title!,
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: 16,
                 ),
             maxLines: 3,
             overflow: TextOverflow.ellipsis,

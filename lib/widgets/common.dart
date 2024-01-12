@@ -37,8 +37,11 @@ class NewsList extends StatelessWidget {
           );
         }
 
-        return SmallNewsCard(
-          news: newsList![index],
+        return Padding(
+          padding: verticalPadding4,
+          child: SmallNewsCard(
+            news: newsList![index],
+          ),
         );
       },
       separatorBuilder: (BuildContext context, int index) {
